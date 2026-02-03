@@ -1,6 +1,6 @@
-<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.0.6 Chrome/138.0.7204.100 Electron/37.2.3 Safari/537.36" version="28.0.6">
-  <diagram name="現行システム構成" id="-imneQzta5VDs45z8GPH">
-    <mxGraphModel dx="1188" dy="729" grid="0" gridSize="10" guides="0" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.0.6 Chrome/138.0.7204.100 Electron/37.2.3 Safari/537.36" version="28.0.6" pages="2">
+  <diagram name="現行システム構成1" id="-imneQzta5VDs45z8GPH">
+    <mxGraphModel dx="1426" dy="875" grid="0" gridSize="10" guides="0" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -49,7 +49,7 @@
             <mxPoint x="661" y="325" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="s3AXo41RKh5qSyvcs3n8-1" value="*中略*" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="Q3UYJ495K424dCMXBufq-14">
+        <mxCell id="s3AXo41RKh5qSyvcs3n8-1" value="*中略*" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="Q3UYJ495K424dCMXBufq-14" vertex="1" connectable="0">
           <mxGeometry x="-0.2661" relative="1" as="geometry">
             <mxPoint x="2" y="-13" as="offset" />
           </mxGeometry>
@@ -60,7 +60,7 @@
             <mxPoint x="408" y="430" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="s3AXo41RKh5qSyvcs3n8-3" value="*中略*" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="Q3UYJ495K424dCMXBufq-15">
+        <mxCell id="s3AXo41RKh5qSyvcs3n8-3" value="*中略*" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="Q3UYJ495K424dCMXBufq-15" vertex="1" connectable="0">
           <mxGeometry x="-0.529" y="1" relative="1" as="geometry">
             <mxPoint x="10" y="-11" as="offset" />
           </mxGeometry>
@@ -103,6 +103,82 @@
         </mxCell>
         <mxCell id="Q3UYJ495K424dCMXBufq-25" value="カード会社" style="whiteSpace=wrap;html=1;rounded=1;" parent="1" vertex="1">
           <mxGeometry x="913" y="221" width="120" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="現行システム構成2" id="DAu2w6QN_xvd2OAGC9X_">
+    <mxGraphModel dx="983" dy="603" grid="0" gridSize="10" guides="0" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="g3WY5uFapIZtHJQwHett-0" />
+        <mxCell id="g3WY5uFapIZtHJQwHett-1" parent="g3WY5uFapIZtHJQwHett-0" />
+        <mxCell id="g3WY5uFapIZtHJQwHett-2" value="決済システム（PCIDSS環境）" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="g3WY5uFapIZtHJQwHett-1">
+          <mxGeometry x="184" y="60" width="210" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="g3WY5uFapIZtHJQwHett-3" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="g3WY5uFapIZtHJQwHett-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="206" y="91" as="sourcePoint" />
+            <mxPoint x="603" y="91" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g3WY5uFapIZtHJQwHett-4" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=light-dark(#fafffa, #1f2f1e);strokeColor=#82b366;" vertex="1" parent="g3WY5uFapIZtHJQwHett-1">
+          <mxGeometry x="205" y="170" width="399" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="g3WY5uFapIZtHJQwHett-5" value="JCN (CARDNET)" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="g3WY5uFapIZtHJQwHett-1">
+          <mxGeometry x="650" y="63" width="149" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="g3WY5uFapIZtHJQwHett-6" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="g3WY5uFapIZtHJQwHett-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="653" y="92" as="sourcePoint" />
+            <mxPoint x="795" y="92" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g3WY5uFapIZtHJQwHett-7" value="EC2 [xxx-pci-jcn-x]" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="g3WY5uFapIZtHJQwHett-1">
+          <mxGeometry x="190" y="130" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="g3WY5uFapIZtHJQwHett-8" value="× ２台構成（Act-Act）" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="g3WY5uFapIZtHJQwHett-1">
+          <mxGeometry x="185" y="329" width="167" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="g3WY5uFapIZtHJQwHett-10" value="Transit&lt;div&gt;決済端末（広域）&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="g3WY5uFapIZtHJQwHett-1">
+          <mxGeometry x="59" y="233" width="120" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="g3WY5uFapIZtHJQwHett-12" value="AP22：&lt;div&gt;CARDNET業務サービス&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="g3WY5uFapIZtHJQwHett-1">
+          <mxGeometry x="252" y="232" width="140" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="g3WY5uFapIZtHJQwHett-15" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;dashed=1;dashPattern=8 8;" edge="1" parent="g3WY5uFapIZtHJQwHett-1" source="g3WY5uFapIZtHJQwHett-10" target="g3WY5uFapIZtHJQwHett-12">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="318" y="430" as="sourcePoint" />
+            <mxPoint x="408" y="430" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g3WY5uFapIZtHJQwHett-16" value="*中略*" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="g3WY5uFapIZtHJQwHett-15">
+          <mxGeometry x="-0.529" y="1" relative="1" as="geometry">
+            <mxPoint x="10" y="-11" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g3WY5uFapIZtHJQwHett-19" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="g3WY5uFapIZtHJQwHett-1" source="g3WY5uFapIZtHJQwHett-12" target="g3WY5uFapIZtHJQwHett-20">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="500" y="403" as="sourcePoint" />
+            <mxPoint x="440" y="251" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g3WY5uFapIZtHJQwHett-20" value="FEXICS" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="g3WY5uFapIZtHJQwHett-1">
+          <mxGeometry x="447" y="232" width="85" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="g3WY5uFapIZtHJQwHett-22" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="g3WY5uFapIZtHJQwHett-1" source="g3WY5uFapIZtHJQwHett-23" target="g3WY5uFapIZtHJQwHett-25">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="g3WY5uFapIZtHJQwHett-23" value="CARDNET：&lt;br&gt;3M308090001" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="g3WY5uFapIZtHJQwHett-1">
+          <mxGeometry x="658" y="233" width="118" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="g3WY5uFapIZtHJQwHett-24" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;startArrow=blockThin;startFill=1;" edge="1" parent="g3WY5uFapIZtHJQwHett-1" source="g3WY5uFapIZtHJQwHett-20" target="g3WY5uFapIZtHJQwHett-23">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="966" y="308" as="sourcePoint" />
+            <mxPoint x="1012" y="308" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g3WY5uFapIZtHJQwHett-25" value="カード会社" style="whiteSpace=wrap;html=1;rounded=1;" vertex="1" parent="g3WY5uFapIZtHJQwHett-1">
+          <mxGeometry x="809" y="222" width="120" height="60" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
