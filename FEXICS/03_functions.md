@@ -8,6 +8,19 @@
 
 ---
 
+#### INDEX
+
+- [共通事項](#2-共通事項)
+  - 実行環境
+  - ログ要件
+- Routing Engine
+  - 死活監視 
+- Gateway Service
+  - 接続センターによる通信仕様変更
+  - 開発環境モード
+
+---
+
 ## 1. 機能要件
 
 本ドキュメントでは、FEXICS代替として新規開発する **Routing Engine** および **Gateway Service** の機能要件を定義する。  
@@ -20,16 +33,29 @@
 | **Routing Engine** | 業務アプリからの電文を受信し、適切な Gateway Service に振り分ける |
 | **Gateway Service** | CAFIS/CARDNET との接続管理および電文変換を行う。決済ネットワーク事業者 = MC間の契約回線ごとに配置 |
 
-#### INDEX
+#### 機能一覧
 
-- [共通事項](#2-共通事項)
-  - 実行環境
-  - ログ要件
-- Routing Engine
-  - 死活監視 
-- Gateway Service
-  - 接続センターによる通信仕様変更
-  - 開発環境モード
+| No | コンポーネント | 機能 | 対応コマンド | 節 |
+|----|---------------|------|-------------|-----|
+| F-01 | 共通 | ログ出力 | - | 2.1 |
+| F-02 | Routing Engine | 電文受信 | - | 3.1 |
+| F-03 | Routing Engine | 電文解析・仕向け先判定 | - | 3.2 |
+| F-04 | Routing Engine | フェイルオーバー | - | 3.3 |
+| F-05 | Routing Engine | スレッド管理 | - | 3.4 |
+| F-06 | Gateway（共通） | 接続管理 | - | 4.1 |
+| F-07 | Gateway（共通） | セッション管理 | - | 4.2 |
+| F-08 | Gateway（共通） | 電文変換 | - | 4.3 |
+| F-09 | Gateway（共通） | 障害対応 | - | 4.4 |
+| F-10 | Gateway（共通） | 監視 | - | 4.5 |
+| F-11 | Gateway（CAFIS） | iD決済 | B01, B11, B12 | 5.1 |
+| F-12 | Gateway（CAFIS） | MS（磁気）決済 | B16, B17 | 5.1 |
+| F-13 | Gateway（CAFIS） | IC決済 | B22, B23, B24 | 5.1 |
+| F-14 | Gateway（CAFIS） | 障害取消 | B25 | 5.1 |
+| F-15 | Gateway（CAFIS） | システム制御 | C01, C02, C03, C11, C12 | 5.1 |
+| F-16 | Gateway（CARDNET） | IC決済 | OnlineAuthICC, Cancel | 6.1 |
+| F-17 | Gateway（CARDNET） | 障害取消 | SystemCancel | 6.1 |
+| F-18 | Gateway（CARDNET） | システム制御 | SignOn, SignOff, GetStatus, CutOver, Echo | 6.1 |
+| F-19 | Gateway（CARDNET） | 固有処理 | - | 6.3 |
 
 ---
 
