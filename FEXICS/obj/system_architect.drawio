@@ -1,4 +1,125 @@
-<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.0.6 Chrome/138.0.7204.100 Electron/37.2.3 Safari/537.36" version="28.0.6" pages="4">
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.0.6 Chrome/138.0.7204.100 Electron/37.2.3 Safari/537.36" version="28.0.6" pages="6">
+  <diagram id="GJOBiHwjcfSHfSkgeq4n" name="コンテナ構成">
+    <mxGraphModel dx="1426" dy="875" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="TnZBkJe2xyDiPUpLmbHb-1" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="110" y="150" width="720" height="680" as="geometry" />
+        </mxCell>
+        <mxCell id="TnZBkJe2xyDiPUpLmbHb-2" value="CAFIS &amp;amp; CARDNET 接続用 ECSクラスタ" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="70" y="120" width="300" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="TnZBkJe2xyDiPUpLmbHb-3" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="140" y="190" width="300" height="620" as="geometry" />
+        </mxCell>
+        <mxCell id="TnZBkJe2xyDiPUpLmbHb-4" value="ECSサービス（Routing Engine）" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="125" y="160" width="225" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="TnZBkJe2xyDiPUpLmbHb-5" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="160" y="234" width="260" height="106" as="geometry" />
+        </mxCell>
+        <mxCell id="TnZBkJe2xyDiPUpLmbHb-6" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="470" y="190" width="300" height="290" as="geometry" />
+        </mxCell>
+        <mxCell id="TnZBkJe2xyDiPUpLmbHb-7" value="ECSサービス（Gateway Service）CAFIS構成" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="459" y="160" width="301" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="TnZBkJe2xyDiPUpLmbHb-8" value="ECSタスク１" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="150" y="204" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="TnZBkJe2xyDiPUpLmbHb-9" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="160" y="420" width="260" height="39" as="geometry" />
+        </mxCell>
+        <mxCell id="TnZBkJe2xyDiPUpLmbHb-10" value="ECSタスクｎ" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="150" y="390" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="TnZBkJe2xyDiPUpLmbHb-11" value="・&lt;div&gt;・&lt;/div&gt;&lt;div&gt;・&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="265" y="370" width="50" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="TnZBkJe2xyDiPUpLmbHb-12" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="490" y="234" width="260" height="106" as="geometry" />
+        </mxCell>
+        <mxCell id="TnZBkJe2xyDiPUpLmbHb-13" value="ECSタスク１" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="480" y="204" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="TnZBkJe2xyDiPUpLmbHb-14" value="ECSタスクｎ" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="480" y="390" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="TnZBkJe2xyDiPUpLmbHb-15" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="490" y="420" width="260" height="39" as="geometry" />
+        </mxCell>
+        <mxCell id="TnZBkJe2xyDiPUpLmbHb-16" value="・&lt;div&gt;・&lt;/div&gt;&lt;div&gt;・&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="598" y="370" width="50" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="TnZBkJe2xyDiPUpLmbHb-17" value="Container （Routing Engine）" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="185" y="246" width="210" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="TnZBkJe2xyDiPUpLmbHb-18" value="Container （Gateway Service）" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="515" y="246" width="210" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="TnZBkJe2xyDiPUpLmbHb-20" value="&lt;font style=&quot;color: rgb(0, 25, 255); font-size: 18px;&quot;&gt;①&lt;/font&gt;" style="html=1;shadow=0;dashed=0;align=center;verticalAlign=middle;shape=mxgraph.arrows2.arrow;dy=0.55;dx=25;notch=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="70" y="264" width="50" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="TnZBkJe2xyDiPUpLmbHb-21" value="&lt;font color=&quot;#0019ff&quot;&gt;&lt;span style=&quot;font-size: 18px;&quot;&gt;②&lt;/span&gt;&lt;/font&gt;" style="html=1;shadow=0;dashed=0;align=center;verticalAlign=middle;shape=mxgraph.arrows2.arrow;dy=0.55;dx=25;notch=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="430" y="266" width="50" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="TnZBkJe2xyDiPUpLmbHb-22" value="Container（Dummy Center）" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="515" y="303" width="210" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="TnZBkJe2xyDiPUpLmbHb-23" value="&lt;font style=&quot;color: rgb(255, 3, 3);&quot;&gt;開発環境のみ&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="500" y="290" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="TnZBkJe2xyDiPUpLmbHb-24" value="&lt;font color=&quot;#0019ff&quot;&gt;&lt;span style=&quot;font-size: 18px;&quot;&gt;③&lt;/span&gt;&lt;/font&gt;" style="html=1;shadow=0;dashed=0;align=center;verticalAlign=middle;shape=mxgraph.arrows2.arrow;dy=0.55;dx=25;notch=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="790" y="266" width="50" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="TnZBkJe2xyDiPUpLmbHb-25" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="470" y="520" width="300" height="290" as="geometry" />
+        </mxCell>
+        <mxCell id="TnZBkJe2xyDiPUpLmbHb-26" value="ECSサービス（Gateway Service）CARDNET構成" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="459" y="490" width="301" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="TnZBkJe2xyDiPUpLmbHb-27" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="490" y="564" width="260" height="106" as="geometry" />
+        </mxCell>
+        <mxCell id="TnZBkJe2xyDiPUpLmbHb-28" value="ECSタスク１" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="480" y="534" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="TnZBkJe2xyDiPUpLmbHb-29" value="ECSタスクｎ" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="480" y="720" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="TnZBkJe2xyDiPUpLmbHb-30" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="490" y="750" width="260" height="39" as="geometry" />
+        </mxCell>
+        <mxCell id="TnZBkJe2xyDiPUpLmbHb-31" value="・&lt;div&gt;・&lt;/div&gt;&lt;div&gt;・&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="598" y="700" width="50" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="TnZBkJe2xyDiPUpLmbHb-32" value="Container （Gateway Service）" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="515" y="576" width="210" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="TnZBkJe2xyDiPUpLmbHb-33" value="Container（Dummy Center）" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="515" y="633" width="210" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="TnZBkJe2xyDiPUpLmbHb-34" value="&lt;font style=&quot;color: rgb(255, 3, 3);&quot;&gt;開発環境のみ&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="500" y="620" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="TnZBkJe2xyDiPUpLmbHb-35" value="&lt;font color=&quot;#0019ff&quot;&gt;&lt;span style=&quot;font-size: 18px;&quot;&gt;③&lt;/span&gt;&lt;/font&gt;" style="html=1;shadow=0;dashed=0;align=center;verticalAlign=middle;shape=mxgraph.arrows2.arrow;dy=0.55;dx=25;notch=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="790" y="596" width="50" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="TnZBkJe2xyDiPUpLmbHb-36" value="&lt;font color=&quot;#0019ff&quot;&gt;&lt;span style=&quot;font-size: 18px;&quot;&gt;②&lt;/span&gt;&lt;/font&gt;" style="html=1;shadow=0;dashed=0;align=center;verticalAlign=middle;shape=mxgraph.arrows2.arrow;dy=0.55;dx=25;notch=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="430" y="564" width="50" height="120" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="eCYiJNtpSaYDf3lkVXNd" name="没→">
+    <mxGraphModel dx="1426" dy="875" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+      </root>
+    </mxGraphModel>
+  </diagram>
   <diagram name="現行システム構成1" id="-imneQzta5VDs45z8GPH">
     <mxGraphModel dx="1426" dy="875" grid="0" gridSize="10" guides="0" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>

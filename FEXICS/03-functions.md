@@ -10,20 +10,29 @@
 
 #### INDEX
 
-- [共通事項](#2-共通事項)
+- 全体システム構成
+
+- 機能要件
   - 実行環境
-  - ログ要件
-- Routing Engine
-  - 死活監視 
-- Gateway Service
-  - 接続センターによる通信仕様変更
-  - 開発環境モード
+  - 各コンポーネント機能
+  - 共通事項
+    - ログ要件
+  - Routing Engine
+    - 死活監視 
+  - Gateway Service
+    - 接続センターによる通信仕様変更
+  - Dummy Center
+    - 開発環境モード
 
 ---
 
-## 1. 機能要件
+## 1. 全体システム構成（変更後システム）
 
-本ドキュメントでは、FEXICS代替として新規開発する **Routing Engine** および **Gateway Service** の機能要件を定義する。  
+TODO : 図
+
+## 2. 機能要件
+
+本章では、FEXICS代替として新規開発する **Routing Engine** および **Gateway Service** の機能要件を定義する。  
 機能の洗い出しは、既存コンポーネント（AP02, AP03, AP22）のソースコード調査結果に基づく。
 
 #### 記載対象
@@ -32,6 +41,47 @@
 |---------------|------|
 | **Routing Engine** | 業務アプリからの電文を受信し、適切な Gateway Service に振り分ける |
 | **Gateway Service** | CAFIS/CARDNET との接続管理および電文変換を行う。決済ネットワーク事業者 = MC間の契約回線ごとに配置 |
+
+## 1.1 実行環境
+
+**Routing Engine** および **Gateway Service** は Amazon ECS 内で動作するコンテナ環境で動作します。
+
+**コンテナ動作イメージ**
+![コンテナ環境](./img/system_architect-3.png)
+
+
+- Routing Engine は CAFIS、CARDNET で共通のサービス構成を使用します。  
+  （AP02 -> CARDNET などの構成もネットワーク上は可能。  
+    これは現在 CAFIS サーバで利用している機能を CARDNET 側に繋ぎやすくするための考慮です）   
+
+- 処理は必ず Routing Engine 経由で行われます。
+  Routing Engine は 受けた処理要求から CAFIS | CARDNET のどちらに接続するかを判断し、
+  対応する Gateway Service にルーティングします。
+
+- 受けた電文がどちらの仕様で動作するかは、各々の Gateway Service の起動設定で決定します。   
+  (Strategy Pattern の実装イメージ)
+
+#### [処理フロー]
+
+1. ① AP02, または AP22 からの通信を Routing Engine が受ける
+2. ② 受けたデータを対応する Gateway Service の生存インスタンスに転送する（ヘッダ判定）
+3. ③ カード会社ネットワークへの通信を行う  
+   ※ TCP接続は CAFIS | CARDNET 側から行われ常時接続となるため、データ部の送信となる。
+
+#### 開発環境の動作
+開発環境はカード会社ネットワークへの接続が行えないため、`Dummy Center` sidecar を構成し、そこに通信を行う。  
+※ タスク定義でデプロイする
+
+![タスク定義](./img/system_architect-ecs-setting.png)
+
+
+
+#### データストア
+Gateway Service は電文データの記録をもつ必要がある。  
+※ 主に、取引の前回処理結果を参照する必要のある電文対応： 障害取消など
+
+データストアは 【🚧TODO】XXX に構築する。
+
 
 #### 機能一覧
 
