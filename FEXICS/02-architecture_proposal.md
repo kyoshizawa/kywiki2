@@ -13,7 +13,7 @@
 ### 基本原則
 
 1. **既存構成の維持**: 現行のVPC構成、ネットワーク、PCI DSS範囲は変更しない
-2. **インターフェース互換**: 既存アプリ（CAFIS業務処理サービス、CARDNET業務サービス）からの呼び出しインターフェースを維持
+2. **インターフェース互換**: 既存アプリ（CAFIS業務処理サービス、CARDNET業務サービス）から同一データで同一の電文機能を実行できること
 3. **段階的移行**: Phase 1でFEXICS置き換え、Phase 2以降で必要に応じてモダナイズ
 4. **シンプルな構成**: 統合されたGateway Serviceで全機能を提供
 5. **回線制約の考慮**: CAFIS/CARDNETからの接続を受け付ける構成
@@ -33,7 +33,7 @@
 | FEXICS置き換え | ✅ | - |
 | AP03廃止・統合 | ✅ | - |
 | 統合Gateway Service | ✅ | - |
-| 仕向け先ルーティング | ✅ | 拡張 |
+| 接続コードによるルーティング | ✅ | 拡張 |
 | VPC分離 | ❌ | 検討 |
 | 外部API公開（SaaS） | ❌ | 検討 |
 | PCI DSS範囲見直し | ❌ | 検討 |
@@ -100,7 +100,7 @@ graph TB
 | 接続方向 | CAFIS/CARDNETから接続を受ける（自社がListen） | Gateway Serviceで常時Listen |
 | 回線数制限 | CAFIS/CARDNETからの接続数に上限あり | 回線ごとにGateway Serviceを配置 |
 | セッション数制限 | 同時セッション数に上限あり | 契約変更で増加可能、上限時は回線追加 |
-| 仕向け先ルーティング | 仕向け先に応じた回線選択が必要 | Gateway Service内でルーティング |
+| 接続コードルーティング | 接続コードに応じた回線選択が必要 | Gateway Service内でルーティング |
 
 ### 統合アーキテクチャ
 
@@ -113,7 +113,7 @@ graph TB
 
     subgraph "新規コンポーネント"
         subgraph "Routing Layer"
-            RT[Routing Engine<br/>仕向け先判定・振り分け]
+            RT[Routing Engine<br/>接続コード判定・振り分け]
         end
 
         subgraph "Gateway Layer"
@@ -130,9 +130,9 @@ graph TB
 
     CB -->|TCP:7000| RT
     CS -->|TCP:5000| RT
-    RT -->|仕向け先X| GW1
-    RT -->|仕向け先Y| GW2
-    RT -->|CARDNET| GW3
+    RT -->|CAFIS:2s30809-000X| GW1
+    RT -->|CAFIS:2s30809-000Y| GW2
+    RT -->|CARDNET:3M30809-000X| GW3
     GW1 ---|↑ Connect| CAFIS
     GW2 ---|↑ Connect| CAFIS
     GW3 ---|↑ Connect| CARDNET
@@ -169,13 +169,13 @@ graph TB
 
 | 項目 | 仕様 |
 |------|------|
-| 役割 | 電文解析、仕向け先判定、Gateway振り分け |
+| 役割 | 電文解析、接続コードによるGateway振り分け |
 | 実行環境 | Amazon ECS on EC2 |
 | 待ち受けPort | 7000（CAFIS系）, 5000（CARDNET系） |
 | スケール | 水平スケール可（ステートレス） |
 
 **機能**:
-- 電文ヘッダ解析（仕向け先判定）
+- 電文ヘッダ解析（接続コード判定）
 - ルーティングテーブルに基づくGateway選択
 - Gateway障害時のフェイルオーバー
 
