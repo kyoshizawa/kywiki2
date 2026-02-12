@@ -35,6 +35,8 @@ sequenceDiagram
     TOOL ->> D: ⑧ fxctrl_cn shutdown
 ```
 
+### 処理説明
+
 1.  FEXICS Daemonを起動します。
 2.  CARDNETセンターにサインオンします。（「2.2.1
     加盟店からの開始・終了処理」参照）
