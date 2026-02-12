@@ -35,6 +35,10 @@
 
 ![構成図イメージ](./img/functions-1.png)
 
+
+【TODO】ECS を使うとリタイアリングして CAFIS 接続がきれる？
+
+
 ## 2. 実行環境
 
 **Routing Engine** および **Gateway Service** は Amazon ECS 内で動作するコンテナ環境で動作します。
@@ -77,6 +81,7 @@ Gateway Service は電文データの記録をもつ必要がある。
 
 データストアは 【🚧TODO】XXX に構築する。
 
+※ SecureDB に保存で検討 : 新規テーブル : ストライプは持ちたくない
 
 ## 3. ユースケース
 
