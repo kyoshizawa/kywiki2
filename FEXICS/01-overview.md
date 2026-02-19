@@ -40,7 +40,7 @@ CAFIS/CARDNET接続用ネットワーク中継パッケージソフト「FEXICS�
 
 ## 4. 機能要件
 
-[機能要件](./04-functions.md) を参照。
+[機能要件](./04-functions_00_top.md) を参照。
 
 ---
 
@@ -90,3 +90,11 @@ CAFIS/CARDNET接続用ネットワーク中継パッケージソフト「FEXICS�
 | コンテナ障害 | サービス断 | Multi-AZ + Auto Recovery |
 | AP03の隠れた機能 | 機能欠落 | 切替前にAP03の動作ログを詳細分析、並行稼働で差異検出 |
 | AP02の接続先変更 | 設定ミス | 環境変数/設定ファイルで接続先を外部化、段階的切替 |
+
+
+## 7. 関連資料
+
+以下に保存
+
+https://github.com/MobileCreate/pay_pf_doc_wk/tree/main/docs/FEXICS
+
