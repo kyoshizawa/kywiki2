@@ -41,54 +41,30 @@
 
 ---
 
-## 2. 現行システムと廃止対象
+## 2. 構築・変更対象
 
-### 現行の接続パターン
+**CAFIS関連**
 
-```mermaid
-graph TB
-    subgraph "業務アプリケーション"
-        CB[CAFIS業務処理サービス<br/>AP02]
-        CS[CARDNET業務サービス<br/>AP22]
-    end
+| コンポーネント | 区分 | 現行配置サーバ | 詳細 |
+| --- | --- | --- | --- |
+| FEXICS | 廃止 | cfs0x | EOL対応（本プロジェクトの主目的） |
+| AP03 (CAFIS通信制御) | 廃止 | cfs0x | FEXICS廃止に伴い |
+| AP02 (CAFIS業務ロジック) | 更新 | cfs0x | ECSに対応し新規配置、接続先を routing engine に対応 |
+| AP01 (端末間通信:閉域) | 更新 | com0x | 顧客指定での通信先切替 | 
+| AP11 (端末間通信:広域) | 更新 | com0x | 顧客指定での通信先切替 | 
+| routing engine | 新規 | - | 接続先コードによる gateway service への中継を行う |
+| gateway service | 新規 | - | CAFIS / CARDNET への接続機能 |
 
-    subgraph "通信レイヤー（廃止対象）"
-        CA[CAFIS通信アプリ<br/>AP03]
-        FX[FEXICS<br/>Port 5000]
-    end
+**CARDNET関連**
 
-    subgraph "外部ネットワーク（専用線）"
-        CAFIS[CAFIS]
-        CARDNET[CARDNET]
-    end
-
-    CB -->|TCP:7000| CA
-    CA -->|TCP:5000| FX
-    CS -->|TCP:5000| FX
-    FX ---|↑ Connect:2010| CAFIS
-    FX ---|↑ Connect:2200| CARDNET
-
-    style CA fill:#ffcccc
-    style FX fill:#ffcccc
-```
-
-### 廃止対象コンポーネント
-
-| コンポーネント | 理由 |
-|---------------|------|
-| **FEXICS** | EOL対応（本プロジェクトの主目的） |
-| **AP03 CAFIS通信アプリ** | FEXICS前提の設計、単純中継のため統合可能 |
-
-### データフロー一覧（変更対象）
-
-| データフロー | 現行 | 新規 | 用途 |
-|-------------|------|------|------|
-| DF01-6,7,8 | AP02→AP03→FEXICS→CAFIS | AP02→Gateway→CAFIS | CAFIS決済（VPT端末） |
-| DF08-6,7,8 | AP02→AP03→FEXICS→CAFIS | AP02→Gateway→CAFIS | 広域端末操作 |
-| DF16-9,10 | AP22→FEXICS→CARDNET | AP22→Gateway→CARDNET | トランジット端末操作 |
-| DF17-5,6 | AP22→FEXICS→CARDNET | AP22→Gateway→CARDNET | JCN合算オーソリ・売上連携 |
-| DF18-7,8 | AP22→FEXICS→CARDNET | AP22→Gateway→CARDNET | 会員登録 |
-| DF19-6,7 | AP22→FEXICS→CARDNET | AP22→Gateway→CARDNET | 会員情報照会 |
+| コンポーネント | 区分 | 現行配置サーバ | 詳細 |
+| --- | --- | --- | --- |
+| FEXICS | 廃止 | jcn0x | EOL対応（本プロジェクトの主目的） |
+| AP22 (CARDNET業務ロジック) | 更新 | jcn0x | ECSに対応し新規配置、接続先を routing engine に対応 |
+| AP21 (Transit端末間通信) | 更新 | ECS | 顧客指定での通信先切替 | 
+| AP24 (Webアプリ向けAPI) | 更新 | Lambda | 通信先切替 |
+| routing engine | - | - | CAFIS と同様 |
+| gateway service | - | - | CAFIS と同様 |
 
 ---
 
