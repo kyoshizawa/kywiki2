@@ -130,7 +130,7 @@ CAFIS での移行完了後に着手する。基本的な移行の流れは CAFI
 ![移行イメージ](./img/migration_plan-3.png)
 
 - CAFIS 側で構築した共通基盤（Routing Engine / Gateway Service）を CARDNET 向けに拡張する
-- 役割を明確にするため環境は インフラ環境 : プロセスは `CAFIS と別で構築`する
+- routing engine , gateway service は `CAFIS と共通のインフラ環境`とする
 - 認定試験（伝送試験・機能試験）は回線 3M30809-0005（解放試験用）で実施する
 
 
