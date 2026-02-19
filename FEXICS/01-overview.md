@@ -27,22 +27,14 @@ CAFIS/CARDNET接続用ネットワーク中継パッケージソフト「FEXICS�
 *   **SaaS化の検討（将来構想）**: 自社構築した機能を将来的にSaaSとして外販、または他社とインフラをシェアすることで維持・運用費を削減するモデルの検討を行う。
 
 ## 2. 移行計画
+
 [移行計画](./02-migration_plan.md) を参照。
 
 ---
 
-## 3. アーキテクチャ概要
+## 3. アーキテクチャ設計
 
-FEXICSおよびCAFIS通信アプリ（AP03）を廃止し、新規に**Routing Engine**と**Gateway Service**を開発する。
-業務アプリ（AP02/AP22）からの電文をRouting Engineで仕向け先判定し、回線ごとに配置されたGateway ServiceがCAFIS/CARDNETとの接続・電文変換を担う。
-
-```
-業務アプリ → Routing Engine → Gateway Service → CAFIS/CARDNET
-                                    ↑
-                              回線ごとに配置
-```
-
-詳細は [アーキテクチャ設計](./03-architecture_proposal.md) を参照。
+[アーキテクチャ設計](./03-architecture_proposal.md) を参照。
 
 ---
 

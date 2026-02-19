@@ -39,9 +39,32 @@
 | 外部API公開（SaaS） | ❌ | 検討 |
 | PCI DSS範囲見直し | ❌ | 検討 |
 
+### 設計上の制約
+
+| 制約 | 内容 | 対応方針 |
+|------|------|---------|
+| 接続方向 | CAFIS/CARDNETから接続を受ける（自社がListen） | Gateway Serviceで常時Listen |
+| 常時接続 | CAFIS/CARDNETからの接続は常時維持する | Gateway Serviceで接続保持 |
+| 回線数制限 | CAFIS/CARDNETからの接続数に上限あり | 回線ごとにGateway Serviceを配置 |
+| セッション数制限 | 同時セッション数に上限あり | 契約変更で増加可能、上限時は回線追加 |
+| 接続コードルーティング | 接続コードに応じた回線選択が必要 | Routing Engine内でルーティング |
+
 ---
 
 ## 2. 構築・変更対象
+
+### 概要
+
+FEXICSおよびCAFIS通信アプリ（AP03）を廃止し、新規に**Routing Engine**と**Gateway Service**を開発する。
+業務アプリ（AP02/AP22）からの電文をRouting Engineで仕向け先判定し、回線ごとに配置されたGateway ServiceがCAFIS/CARDNETとの接続・電文変換を担う。
+
+```
+業務アプリ → Routing Engine → Gateway Service → CAFIS/CARDNET
+                                    ↑
+                              回線ごとに配置
+```
+
+### 一覧
 
 **CAFIS関連**
 
@@ -63,80 +86,32 @@
 | AP22 (CARDNET業務ロジック) | 更新 | jcn0x | ECSに対応し新規配置、接続先を routing engine に対応 |
 | AP21 (Transit端末間通信) | 更新 | ECS | 顧客指定での通信先切替 | 
 | AP24 (Webアプリ向けAPI) | 更新 | Lambda | 通信先切替 |
-| routing engine | - | - | CAFIS と同様 |
-| gateway service | - | - | CAFIS と同様 |
+
+**その他**
+
+| コンポーネント | 区分 | 現行配置サーバ | 詳細 |
+| --- | --- | --- | --- |
+| cli | 新規 | - | routing engine 手動操作用 |
+| dummy server | 新規 | - | 開発環境のみのサーバシミュレータ |
 
 ---
 
-## 3. 新システム構成（Phase 1）
-
-### 設計上の制約
-
-| 制約 | 内容 | 対応方針 |
-|------|------|---------|
-| 接続方向 | CAFIS/CARDNETから接続を受ける（自社がListen） | Gateway Serviceで常時Listen |
-| 回線数制限 | CAFIS/CARDNETからの接続数に上限あり | 回線ごとにGateway Serviceを配置 |
-| セッション数制限 | 同時セッション数に上限あり | 契約変更で増加可能、上限時は回線追加 |
-| 接続コードルーティング | 接続コードに応じた回線選択が必要 | Routing Engine内でルーティング |
+## 3. システム構成（Phase 1）
 
 ### 統合アーキテクチャ
 
-```mermaid
-graph TB
-    subgraph "業務アプリケーション（既存）"
-        CB[CAFIS業務処理サービス<br/>AP02]
-        CS[CARDNET業務サービス<br/>AP22]
-    end
-
-    subgraph "新規コンポーネント"
-        subgraph "Routing Layer"
-            RT[Routing Engine<br/>接続コード判定・振り分け]
-        end
-
-        subgraph "Gateway Layer"
-            GW1[Gateway #1<br/>CAFIS回線A]
-            GW2[Gateway #2<br/>CAFIS回線B]
-            GW3[Gateway #3<br/>CARDNET]
-        end
-    end
-
-    subgraph "外部ネットワーク（専用線）"
-        CAFIS[CAFIS]
-        CARDNET[CARDNET]
-    end
-
-    CB -->|TCP:7000| RT
-    CS -->|TCP:5000| RT
-    RT -->|CAFIS:2s30809-000X| GW1
-    RT -->|CAFIS:2s30809-000Y| GW2
-    RT -->|CARDNET:3M30809-000X| GW3
-    GW1 ---|↑ Connect| CAFIS
-    GW2 ---|↑ Connect| CAFIS
-    GW3 ---|↑ Connect| CARDNET
-```
-
-### スケール戦略
-
-| 状況 | 対応 |
-|------|------|
-| 処理負荷増加 | **スケールアップ**（CPU/メモリ増強） |
-| セッション数不足 | 契約変更でセッション数増加 |
-| 帯域/セッション上限到達 | **回線追加 + Gateway Service追加** |
+![構成図](./img/system_architect-1a.png)
 
 
-### 言語選定（検討中）
+
+### 言語選定
 
 | 候補 | フレームワーク | サポート期限 | 備考 |
 |------|---------------|-------------|------|
 | **C# (.NET 10)** | ASP.NET Core | 2028年11月（LTS） | 既存Windows環境との親和性 |
-| **Kotlin** | Spring Boot / Ktor | Java 21 LTS: 2031年9月 | モダン、コルーチンによる非同期処理 |
-
-**決定時期**: 詳細設計フェーズ
 
 **Note:**
 ```
-C# 優勢
-
 ■ 比較材料
 C# (.NET 10)  移行作業は軽め　PCI環境で使用言語の統一ができる
 Kotlin        EOLがやや長い
