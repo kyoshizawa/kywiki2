@@ -3,7 +3,8 @@
     "allow": [
       "Bash(for f in *FEXICS_API_Reference*.md)",
       "Bash(do git mv \"$f\" \"FEXICS_API_Reference/\")",
-      "Bash(done)"
+      "Bash(done)",
+      "Bash(wsl bash:*)"
     ]
   }
 }
