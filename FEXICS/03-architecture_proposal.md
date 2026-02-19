@@ -103,8 +103,12 @@ FEXICSおよびCAFIS通信アプリ（AP03）を廃止し、新規に**Routing E
 ![構成図](./img/system_architect-1a.png)
 
 
-各変更内容は `機能仕様` にて定義する。
+**MEMO**
+```
+ECS はリタイアリングにより、TCP 常時接続が維持できない。
+そのため、CAFIS / CARDNET 接続部は EC2 を使用している。
 
+```
 
 ---
 
