@@ -1,4 +1,4 @@
-<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.0.6 Chrome/138.0.7204.100 Electron/37.2.3 Safari/537.36" version="28.0.6" pages="5">
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.0.6 Chrome/138.0.7204.100 Electron/37.2.3 Safari/537.36" version="28.0.6" pages="6">
   <diagram name="usecase1" id="lroMyfmaTG7cYp1-NgR0">
     <mxGraphModel dx="1426" dy="875" grid="0" gridSize="10" guides="0" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
@@ -302,6 +302,104 @@
         </mxCell>
         <mxCell id="P2yaeuJAi95F3EfKJ6no-26" value="接続先仕様に応じた実装&lt;div&gt;（ strategy pattern ）&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="Xu2XJbBYzcnB5f1Vr6gG-1">
           <mxGeometry x="392.5" y="716" width="215.5" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="datastore_1-1" id="JXzkv6sQ2WzywQbJSv-8">
+    <mxGraphModel dx="1426" dy="841" grid="0" gridSize="10" guides="0" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="UeIP1tvb-Lf8Th1-A500-0" />
+        <mxCell id="UeIP1tvb-Lf8Th1-A500-1" parent="UeIP1tvb-Lf8Th1-A500-0" />
+        <mxCell id="6nL65-EERR-a4Y-V4HI1-0" value="CAFISカット対象日付" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="UeIP1tvb-Lf8Th1-A500-1">
+          <mxGeometry x="146" y="78" width="140" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="6nL65-EERR-a4Y-V4HI1-1" value="対象日付" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="6nL65-EERR-a4Y-V4HI1-0">
+          <mxGeometry y="30" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="6nL65-EERR-a4Y-V4HI1-6" value="more columns,,," style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="6nL65-EERR-a4Y-V4HI1-0">
+          <mxGeometry y="60" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="6nL65-EERR-a4Y-V4HI1-4" value="CAFISジャーナル" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="UeIP1tvb-Lf8Th1-A500-1">
+          <mxGeometry x="148" y="210" width="140" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="6nL65-EERR-a4Y-V4HI1-5" value="対象日付" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="6nL65-EERR-a4Y-V4HI1-4">
+          <mxGeometry y="30" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="6nL65-EERR-a4Y-V4HI1-7" value="more columns,,," style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="6nL65-EERR-a4Y-V4HI1-4">
+          <mxGeometry y="60" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="6nL65-EERR-a4Y-V4HI1-8" value="" style="endArrow=none;html=1;rounded=0;entryX=0.514;entryY=0.967;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="UeIP1tvb-Lf8Th1-A500-1" source="6nL65-EERR-a4Y-V4HI1-4" target="6nL65-EERR-a4Y-V4HI1-6">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="559" y="458" as="sourcePoint" />
+            <mxPoint x="609" y="408" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="6nL65-EERR-a4Y-V4HI1-9" value="1" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="UeIP1tvb-Lf8Th1-A500-1">
+          <mxGeometry x="202" y="163" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="6nL65-EERR-a4Y-V4HI1-10" value="n" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="UeIP1tvb-Lf8Th1-A500-1">
+          <mxGeometry x="203" y="187" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="6nL65-EERR-a4Y-V4HI1-12" value="CARDNETカット対象日付" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="UeIP1tvb-Lf8Th1-A500-1">
+          <mxGeometry x="454" y="74" width="162" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="6nL65-EERR-a4Y-V4HI1-13" value="対象日付" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="6nL65-EERR-a4Y-V4HI1-12">
+          <mxGeometry y="30" width="162" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="6nL65-EERR-a4Y-V4HI1-14" value="more columns,,," style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="6nL65-EERR-a4Y-V4HI1-12">
+          <mxGeometry y="60" width="162" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="6nL65-EERR-a4Y-V4HI1-15" value="CAFISジャーナル" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="UeIP1tvb-Lf8Th1-A500-1">
+          <mxGeometry x="452" y="210" width="167" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="6nL65-EERR-a4Y-V4HI1-16" value="対象日付" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="6nL65-EERR-a4Y-V4HI1-15">
+          <mxGeometry y="30" width="167" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="6nL65-EERR-a4Y-V4HI1-17" value="more columns,,," style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="6nL65-EERR-a4Y-V4HI1-15">
+          <mxGeometry y="60" width="167" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="6nL65-EERR-a4Y-V4HI1-18" value="" style="endArrow=none;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="UeIP1tvb-Lf8Th1-A500-1" source="6nL65-EERR-a4Y-V4HI1-15" target="6nL65-EERR-a4Y-V4HI1-14">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="556.5" y="209" as="sourcePoint" />
+            <mxPoint x="555.866" y="166.01" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="6nL65-EERR-a4Y-V4HI1-19" value="1" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="UeIP1tvb-Lf8Th1-A500-1">
+          <mxGeometry x="514" y="159" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="6nL65-EERR-a4Y-V4HI1-20" value="n" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="UeIP1tvb-Lf8Th1-A500-1">
+          <mxGeometry x="517" y="184" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="6nL65-EERR-a4Y-V4HI1-21" value="CAFIS最新通番情報" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="UeIP1tvb-Lf8Th1-A500-1">
+          <mxGeometry x="149" y="332" width="140" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="6nL65-EERR-a4Y-V4HI1-22" value="仕向処理通番" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="6nL65-EERR-a4Y-V4HI1-21">
+          <mxGeometry y="30" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="6nL65-EERR-a4Y-V4HI1-24" value="CAFIS処理通番" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="6nL65-EERR-a4Y-V4HI1-21">
+          <mxGeometry y="60" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="6nL65-EERR-a4Y-V4HI1-23" value="more columns,,," style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="6nL65-EERR-a4Y-V4HI1-21">
+          <mxGeometry y="90" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="6nL65-EERR-a4Y-V4HI1-25" value="CARDNET最新通番情報" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="UeIP1tvb-Lf8Th1-A500-1">
+          <mxGeometry x="451" y="330" width="217" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="6nL65-EERR-a4Y-V4HI1-26" value="リトリーバルリファレンスナンバー" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="6nL65-EERR-a4Y-V4HI1-25">
+          <mxGeometry y="30" width="217" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="6nL65-EERR-a4Y-V4HI1-28" value="more columns,,," style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="6nL65-EERR-a4Y-V4HI1-25">
+          <mxGeometry y="60" width="217" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="6nL65-EERR-a4Y-V4HI1-29" value="CARDNET KEK" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="UeIP1tvb-Lf8Th1-A500-1">
+          <mxGeometry x="452" y="478" width="217" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="6nL65-EERR-a4Y-V4HI1-30" value="KMS暗号化済 鍵情報" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="6nL65-EERR-a4Y-V4HI1-29">
+          <mxGeometry y="30" width="217" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="6nL65-EERR-a4Y-V4HI1-31" value="more columns,,," style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="6nL65-EERR-a4Y-V4HI1-29">
+          <mxGeometry y="60" width="217" height="30" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
