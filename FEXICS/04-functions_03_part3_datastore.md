@@ -103,7 +103,7 @@ INSERT / DELETE のみ行い、更新はしない。
 
 ---
 
-### 3.3 CAFIS ジャーナル（保留情報）
+### 4.3 CAFIS ジャーナル（保留情報）
 
 テーブル名：`Trn_CafisJournalHold`
 
@@ -120,15 +120,17 @@ INSERT / DELETE のみ行い、更新はしない。
 
 ---
 
-### 3.4 CAFIS 通番シーケンス
+## 5. シーケンス詳細
+
+### 5.1 CAFIS 通番シーケンス
 
 テーブルなし。SQL Server の **SEQUENCE オブジェクト**で管理する。
 
-- 命名規則：`dbo.CafisSeq_{ConnectCd}`（例：`dbo.CafisSeq_ABC001`）
+- 命名規則：`dbo.CafisSeq_{ConnectCd}`（例：`dbo.CafisSeq_2s308090001`）
 - 接続コードごとに1オブジェクト。初回使用時に動的 `CREATE SEQUENCE` する
 - `NEXT VALUE FOR` はアトミックのため、コンカレント呼び出しでも競合しない
 - カット時に `ALTER SEQUENCE ... RESTART WITH 1` でリセットする
-- `NO CACHE` 指定により、SQL Server 再起動時の採番飛びを防ぐ
+- `CACHE 20` 指定。再起動時に最大20件の採番飛びが発生する可能性があるが、仕様上は重複しないことが要件であり許容範囲
 
 #### 実装サンプル（C# / EF Core）
 
@@ -149,7 +151,7 @@ await context.Database.ExecuteSqlRawAsync($"""
     )
     CREATE SEQUENCE {SeqName(connectCd)}
         AS INT START WITH 1 INCREMENT BY 1
-        MINVALUE 1 MAXVALUE 999999 NO CYCLE NO CACHE
+        MINVALUE 1 MAXVALUE 999999 NO CYCLE CACHE 20
     """);
 
 // 採番（競合しない）
