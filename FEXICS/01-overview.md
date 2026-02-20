@@ -40,7 +40,7 @@ CAFIS/CARDNET接続用ネットワーク中継パッケージソフト「FEXICS�
 
 ## 4. 機能要件
 
-[機能要件](./04-functions_00_top.md) を参照。
+[機能要件](./04-functions_00_main.md) を参照。
 
 ---
 
