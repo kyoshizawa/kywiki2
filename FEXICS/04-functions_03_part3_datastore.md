@@ -31,15 +31,23 @@
 - CAFIS カット対象日付
 - CAFIS ジャーナル
 - CAFIS ジャーナル（保留情報）
-- CAFIS 通番シーケンス（SQL Server SEQUENCE オブジェクト、テーブルなし）
 - CARDNET カット対象日付
 - CARDNET ジャーナル
-- CARDNET 最新通番情報
+- CARDNET ジャーナル（保留情報）
 - CARDNET KEK
 
 #### リレーション
 
 ![図](./img/datastore_1-1.png)
+
+### 3. シーケンス定義一覧
+
+CAFIS/CARDNET ともに電文に使用した最新通番を永続化する必要がある。  
+テーブル保存の場合、UPDATE によるパフォーマンス低下・競合時の例外発生が懸念されるため
+シーケンスオブジェクトをプログラム中から直接利用することでアトミックな採番を可能とする。
+
+- CAFIS 通番シーケンス（SQL Server SEQUENCE オブジェクト、テーブルなし）
+- CARDNET 通番シーケンス（SQL Server SEQUENCE オブジェクト、テーブルなし）
 
 
 
