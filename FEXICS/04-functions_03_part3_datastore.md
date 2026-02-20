@@ -67,6 +67,27 @@ CAFIS の日次バッチ処理において、カット（締め）処理の対�
 
 ---
 
+### 3.2 CAFIS ジャーナル
+
+CAFIS との送受信電文を記録するテーブル。カード番号の生値は保存しない。
+
+| カラム名 | 型 | NOT NULL | 説明 |
+| --- | --- | :---: | --- |
+| journal_id | BIGINT | ○ | ジャーナルID（主キー、自動採番） |
+| cut_date | DATE | ○ | カット対象日付（`cafis_cut_date.cut_date` FK）cascade delete |
+| sequence_no | CHAR(6) | ○ | CAFIS 通番 |
+| direction | CHAR(1) | ○ | 送受信区分（`S`：送信、`R`：受信） |
+| message_type | VARCHAR(10) | ○ | 電文種別コード |
+| raw_data | VARBINARY | ○ | 電文生データ（カード情報該当箇所はトランケーション済） |
+| readable_data | NVARCHAR(MAX) | | 電文のわかりやすい表現（フィールド名と値を対応させたJSON形式）※ 負荷軽減のため cli が要求したらセットする |
+| secure_data_id | BIGINT | | カード番号の参照番号（SecureDB 上のカードデータ参照ID） |
+| hold_flag | CHAR(1) | ○ | 保留電文フラグ（`0`：通常、`1`：保留中） |
+| processed_at | DATETIME | ○ | 電文送受信日時 |
+| created_at | DATETIME | ○ | レコード作成日時 |
+| updated_at | DATETIME | ○ | レコード更新日時 |
+
+---
+
 ### 3.4 CARDNET カット対象日付
 
 CARDNET の日次バッチ処理において、カット（締め）処理の対象となる日付を管理するテーブル。
