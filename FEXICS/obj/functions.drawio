@@ -1,4 +1,4 @@
-<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.0.6 Chrome/138.0.7204.100 Electron/37.2.3 Safari/537.36" version="28.0.6" pages="4">
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.0.6 Chrome/138.0.7204.100 Electron/37.2.3 Safari/537.36" version="28.0.6" pages="5">
   <diagram name="usecase1" id="lroMyfmaTG7cYp1-NgR0">
     <mxGraphModel dx="1426" dy="875" grid="0" gridSize="10" guides="0" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
@@ -216,6 +216,92 @@
         </mxCell>
         <mxCell id="6Tj9cGYIPoijjBKP3QJy-13" value="各種処理" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="L7svVJmpZOiwunUFIRmU-1">
           <mxGeometry x="670" y="395" width="90" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="2-4" id="wLyTwnJsPGIePwYHYrt6">
+    <mxGraphModel dx="1426" dy="841" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="Xu2XJbBYzcnB5f1Vr6gG-0" />
+        <mxCell id="Xu2XJbBYzcnB5f1Vr6gG-1" parent="Xu2XJbBYzcnB5f1Vr6gG-0" />
+        <mxCell id="Xu2XJbBYzcnB5f1Vr6gG-2" value="Gateway Service" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;" vertex="1" parent="Xu2XJbBYzcnB5f1Vr6gG-1">
+          <mxGeometry x="210" y="360" width="440" height="310" as="geometry" />
+        </mxCell>
+        <mxCell id="Xu2XJbBYzcnB5f1Vr6gG-3" value="CAFIS or CARDNET" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="Xu2XJbBYzcnB5f1Vr6gG-1">
+          <mxGeometry x="780" y="427" width="160" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="Xu2XJbBYzcnB5f1Vr6gG-10" value="" style="endArrow=classic;html=1;rounded=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="Xu2XJbBYzcnB5f1Vr6gG-1" source="Xu2XJbBYzcnB5f1Vr6gG-3" target="P2yaeuJAi95F3EfKJ6no-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="780" y="412" as="sourcePoint" />
+            <mxPoint x="650" y="412" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Xu2XJbBYzcnB5f1Vr6gG-15" value="TCP 物理接続" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="Xu2XJbBYzcnB5f1Vr6gG-1">
+          <mxGeometry x="666" y="487" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="P2yaeuJAi95F3EfKJ6no-1" value="TCP制御&lt;div&gt;レイヤ&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="Xu2XJbBYzcnB5f1Vr6gG-1">
+          <mxGeometry x="560" y="452" width="60" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="P2yaeuJAi95F3EfKJ6no-2" value="経路&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;制御&lt;/span&gt;&lt;div&gt;&lt;div&gt;レイヤ&lt;/div&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="Xu2XJbBYzcnB5f1Vr6gG-1">
+          <mxGeometry x="472" y="452" width="60" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="P2yaeuJAi95F3EfKJ6no-3" value="Client" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="Xu2XJbBYzcnB5f1Vr6gG-1">
+          <mxGeometry x="81" y="490" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="P2yaeuJAi95F3EfKJ6no-4" value="Client&amp;nbsp;&lt;div&gt;電文別処理&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="Xu2XJbBYzcnB5f1Vr6gG-1">
+          <mxGeometry x="238" y="410" width="70" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="P2yaeuJAi95F3EfKJ6no-5" value="接続先別&amp;nbsp;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;電文定義 &amp;amp;&amp;nbsp;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;シーケンス&lt;/span&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="Xu2XJbBYzcnB5f1Vr6gG-1">
+          <mxGeometry x="370" y="410" width="80.5" height="221" as="geometry" />
+        </mxCell>
+        <mxCell id="P2yaeuJAi95F3EfKJ6no-9" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="Xu2XJbBYzcnB5f1Vr6gG-1" source="P2yaeuJAi95F3EfKJ6no-3" target="P2yaeuJAi95F3EfKJ6no-4">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="560" y="560" as="sourcePoint" />
+            <mxPoint x="610" y="510" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="P2yaeuJAi95F3EfKJ6no-10" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;flipH=1;labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;rotation=90;" vertex="1" parent="Xu2XJbBYzcnB5f1Vr6gG-1">
+          <mxGeometry x="263" y="655" width="20" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="P2yaeuJAi95F3EfKJ6no-12" value="マルチスレッド" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="Xu2XJbBYzcnB5f1Vr6gG-1">
+          <mxGeometry x="215.5" y="715" width="115" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="P2yaeuJAi95F3EfKJ6no-13" value="" style="endArrow=classic;html=1;rounded=0;dashed=1;dashPattern=1 4;" edge="1" parent="Xu2XJbBYzcnB5f1Vr6gG-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="472" y="482" as="sourcePoint" />
+            <mxPoint x="312" y="482" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="P2yaeuJAi95F3EfKJ6no-14" value="経路確保" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="Xu2XJbBYzcnB5f1Vr6gG-1">
+          <mxGeometry x="302.5" y="453" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="P2yaeuJAi95F3EfKJ6no-17" value="送信" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="Xu2XJbBYzcnB5f1Vr6gG-1">
+          <mxGeometry x="295" y="530" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="P2yaeuJAi95F3EfKJ6no-18" value="特定" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="Xu2XJbBYzcnB5f1Vr6gG-1">
+          <mxGeometry x="295" y="409" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="P2yaeuJAi95F3EfKJ6no-20" value="" style="endArrow=classic;html=1;rounded=0;dashed=1;dashPattern=1 4;" edge="1" parent="Xu2XJbBYzcnB5f1Vr6gG-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="370" y="439" as="sourcePoint" />
+            <mxPoint x="310" y="439" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="P2yaeuJAi95F3EfKJ6no-21" value="" style="endArrow=none;html=1;rounded=0;dashed=1;dashPattern=1 4;startArrow=classic;startFill=1;endFill=0;" edge="1" parent="Xu2XJbBYzcnB5f1Vr6gG-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="770" y="559" as="sourcePoint" />
+            <mxPoint x="304.5" y="559" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="P2yaeuJAi95F3EfKJ6no-24" value="ペイロード" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="Xu2XJbBYzcnB5f1Vr6gG-1">
+          <mxGeometry x="666" y="530" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="P2yaeuJAi95F3EfKJ6no-25" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;flipH=1;labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;rotation=90;" vertex="1" parent="Xu2XJbBYzcnB5f1Vr6gG-1">
+          <mxGeometry x="481.5" y="573.75" width="20" height="252.5" as="geometry" />
+        </mxCell>
+        <mxCell id="P2yaeuJAi95F3EfKJ6no-26" value="接続先仕様に応じた実装&lt;div&gt;（ strategy pattern ）&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="Xu2XJbBYzcnB5f1Vr6gG-1">
+          <mxGeometry x="392.5" y="716" width="215.5" height="30" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
