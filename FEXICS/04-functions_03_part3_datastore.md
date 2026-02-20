@@ -64,8 +64,10 @@ CAFIS の日次バッチ処理において、カット（締め）処理の対�
 | CutDate | DATE | ○ | カット対象日付（主キー） |
 | Status | CHAR(1) | ○ | 処理状態（`0`：未処理、`1`：処理中、`2`：完了） |
 | DeleteDate | DATE | ○ | 削除予定日（`CutDate` + 30日）。カット日付更新コマンド実行時にこの日付に達したレコードをジャーナルごと削除する |
-| CreatedAt | DATETIME | ○ | レコード作成日時 |
-| UpdatedAt | DATETIME | ○ | レコード更新日時 |
+| Created | DATETIME | | レコード作成日時 |
+| Updated | DATETIME | | レコード更新日時 |
+| Modifier | VARCHAR(32) | | 最終更新者 |
+| RowVersion | TIMESTAMP | | 行バージョン（楽観的排他制御） |
 
 ---
 
@@ -87,8 +89,10 @@ CAFIS との送受信電文を記録するテーブル。カード番号の生�
 | SecureDataId | BIGINT | | カード番号の参照番号（SecureDB 上のカードデータ参照ID） |
 | HoldFlag | CHAR(1) | ○ | 保留電文フラグ（`0`：通常、`1`：保留中） |
 | ProcessedAt | DATETIME | ○ | 電文送受信日時 |
-| CreatedAt | DATETIME | ○ | レコード作成日時 |
-| UpdatedAt | DATETIME | ○ | レコード更新日時 |
+| Created | DATETIME | | レコード作成日時 |
+| Updated | DATETIME | | レコード更新日時 |
+| Modifier | VARCHAR(32) | | 最終更新者 |
+| RowVersion | TIMESTAMP | | 行バージョン（楽観的排他制御） |
 
 ---
 
@@ -103,5 +107,7 @@ CARDNET の日次バッチ処理において、カット（締め）処理の対
 | CutDate | DATE | ○ | カット対象日付（主キー） |
 | Status | CHAR(1) | ○ | 処理状態（`0`：未処理、`1`：処理中、`2`：完了） |
 | DeleteDate | DATE | ○ | 削除予定日（`CutDate` + 30日）。カット日付更新コマンド実行時にこの日付に達したレコードをジャーナルごと削除する |
-| CreatedAt | DATETIME | ○ | レコード作成日時 |
-| UpdatedAt | DATETIME | ○ | レコード更新日時 |
+| Created | DATETIME | | レコード作成日時 |
+| Updated | DATETIME | | レコード更新日時 |
+| Modifier | VARCHAR(32) | | 最終更新者 |
+| RowVersion | TIMESTAMP | | 行バージョン（楽観的排他制御） |
