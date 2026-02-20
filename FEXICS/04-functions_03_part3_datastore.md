@@ -47,22 +47,15 @@ CAFIS/CARDNET ともに電文に使用した最新通番を永続化する必要
 シーケンスオブジェクトをプログラム中から直接利用することでアトミックな採番を可能とする。
 
 - CAFIS 通番シーケンス（SQL Server SEQUENCE オブジェクト、テーブルなし）
+  - 対象データ： 仕向処理通番
 - CARDNET 通番シーケンス（SQL Server SEQUENCE オブジェクト、テーブルなし）
+  - 対象データ： リトリーバルリファレンスナンバー
 
+SEQUENCEは接続先コード毎に定義され、存在しない場合はアプリケーションが動的にCREATEする。
 
+## 4. テーブル詳細
 
-
-#### メモ
-
-・保留電文フラグ
-・カード番号の参照番号
-・生データとわかりやすい表現
-
----
-
-## 3. テーブル詳細
-
-### 3.1 CAFIS カット対象日付
+### 4.1 CAFIS カット対象日付
 
 テーブル名：`Trn_CafisCutDate`
 
@@ -73,28 +66,29 @@ CAFIS の日次バッチ処理において、カット（締め）処理の対�
 | CutDate | DATE | ○ | カット対象日付（主キー） |
 | Status | CHAR(1) | ○ | 処理状態（`0`：未処理、`1`：処理中、`2`：完了） |
 | DeleteDate | DATE | ○ | 削除予定日（`CutDate` + 30日）。カット日付更新コマンド実行時にこの日付に達したレコードをジャーナルごと削除する |
-| Created | DATETIME | | レコード作成日時 |
+| Created | DATETIME | | レコード作成日時（`DEFAULT GETDATE()`、INSERT 時に SQL Server が自動セット） |
 | Updated | DATETIME | | レコード更新日時 |
 | Modifier | VARCHAR(32) | | 最終更新者 |
 | RowVersion | TIMESTAMP | | 行バージョン（楽観的排他制御） |
 
 ---
 
-### 3.2 CAFIS ジャーナル
+### 4.2 CAFIS ジャーナル
 
 テーブル名：`Trn_CafisJournal`
 
-CAFIS との送受信電文を記録するテーブル。INSERT / DELETE のみ行い、更新はしない。
+CAFIS との送受信電文を記録するテーブル。
+INSERT / DELETE のみ行い、更新はしない。
 保留状態の有無は `Trn_CafisJournalHold` との LEFT JOIN で判定する（ヒットすれば保留中）。
 
 | カラム名 | 型 | NOT NULL | 説明 |
 | --- | --- | :---: | --- |
-| JournalId | BIGINT | ○ | ジャーナルID（主キー、自動採番） |
+| Id | BIGINT | ○ | ジャーナルID（主キー、自動採番） |
 | CutDate | DATE | ○ | カット対象日付（`Trn_CafisCutDate.CutDate` FK、cascade delete） |
 | ConnectCd | VARCHAR(11) | | 処理した接続コード |
 | DeliveryCd | VARCHAR(11) | | 仕向先会社コード |
 | TerminalNo |VARCHAR(13) | | 端末番号 | 
-| SequenceNo | CHAR(6) | | CAFIS 通番 |
+| SequenceNo | CHAR(6) | | 端末通番 |
 | TransactionDateTime | datetime | | 取引日時（レコードの処理日時ではない） |
 | Direction | CHAR(1) | ○ | 送受信区分（`S`：送信、`R`：受信） |
 | MessageType | VARCHAR(4) | ○ | 電文種別コード |
@@ -102,7 +96,7 @@ CAFIS との送受信電文を記録するテーブル。INSERT / DELETE のみ�
 | ReadableData | NVARCHAR(MAX) | | 電文のわかりやすい表現（フィールド名と値を対応させたJSON形式）※ 負荷軽減のため cli が要求したら解析してセットする |
 | SecureDataId | BIGINT | | カード番号の参照番号（SecureDB 上のカードデータ参照ID） |
 | ProcessedAt | DATETIME | ○ | 電文送受信日時 |
-| Created | DATETIME | | レコード作成日時 |
+| Created | DATETIME | | レコード作成日時（`DEFAULT GETDATE()`、INSERT 時に SQL Server が自動セット） |
 | Updated | DATETIME | | レコード更新日時 |
 | Modifier | VARCHAR(32) | | 最終更新者 |
 | RowVersion | TIMESTAMP | | 行バージョン（楽観的排他制御） |
@@ -118,8 +112,8 @@ CAFIS との送受信電文を記録するテーブル。INSERT / DELETE のみ�
 
 | カラム名 | 型 | NOT NULL | 説明 |
 | --- | --- | :---: | --- |
-| JournalId | BIGINT | ○ | 保留対象のジャーナルID（主キー、`Trn_CafisJournal.JournalId` FK） |
-| Created | DATETIME | | レコード作成日時 |
+| JournalId | BIGINT | ○ | 保留対象のジャーナルID（主キー、`Trn_CafisJournal.Id` FK、cascade delete） |
+| Created | DATETIME | | レコード作成日時（`DEFAULT GETDATE()`、INSERT 時に SQL Server が自動セット） |
 | Updated | DATETIME | | レコード更新日時 |
 | Modifier | VARCHAR(32) | | 最終更新者 |
 | RowVersion | TIMESTAMP | | 行バージョン（楽観的排他制御） |
@@ -182,7 +176,7 @@ CARDNET の日次バッチ処理において、カット（締め）処理の対
 | CutDate | DATE | ○ | カット対象日付（主キー） |
 | Status | CHAR(1) | ○ | 処理状態（`0`：未処理、`1`：処理中、`2`：完了） |
 | DeleteDate | DATE | ○ | 削除予定日（`CutDate` + 30日）。カット日付更新コマンド実行時にこの日付に達したレコードをジャーナルごと削除する |
-| Created | DATETIME | | レコード作成日時 |
+| Created | DATETIME | | レコード作成日時（`DEFAULT GETDATE()`、INSERT 時に SQL Server が自動セット） |
 | Updated | DATETIME | | レコード更新日時 |
 | Modifier | VARCHAR(32) | | 最終更新者 |
 | RowVersion | TIMESTAMP | | 行バージョン（楽観的排他制御） |
