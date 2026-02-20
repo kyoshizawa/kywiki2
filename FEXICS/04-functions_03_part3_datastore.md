@@ -222,7 +222,6 @@ CARDNET センタとの通信に使用する暗号化基本キー（KEK）を接
 - 接続コードごとに1オブジェクト。初回使用時に動的 `CREATE SEQUENCE` する
 - `NEXT VALUE FOR` はアトミックのため、コンカレント呼び出しでも競合しない
 - カット時に `ALTER SEQUENCE ... RESTART WITH 1` でリセットする
-- `CACHE 20` 指定。再起動時に最大20件の採番飛びが発生する可能性があるが、仕様上は重複しないことが要件であり許容範囲
 
 #### 実装サンプル（C# / EF Core）
 
@@ -251,6 +250,51 @@ var no = await context.Database
     .SqlQueryRaw<int>($"SELECT NEXT VALUE FOR {SeqName(connectCd)}")
     .FirstAsync();
 var sequenceNo = no.ToString("D6"); // → "000001"
+
+// カット時にリセット
+await context.Database.ExecuteSqlRawAsync(
+    $"ALTER SEQUENCE {SeqName(connectCd)} RESTART WITH 1");
+```
+
+---
+
+### 5.2 CARDNET 通番シーケンス
+
+テーブルなし。SQL Server の **SEQUENCE オブジェクト**で管理する。
+
+- 対象：リトリーバルリファレンスナンバー（`RetRefNum`、12桁）
+- 命名規則：`dbo.CardnetSeq_{ConnectCd}`（例：`dbo.CardnetSeq_3M308090003`）
+- 接続コードごとに1オブジェクト。初回使用時に動的 `CREATE SEQUENCE` する
+- `NEXT VALUE FOR` はアトミックのため、コンカレント呼び出しでも競合しない
+- カット時に `ALTER SEQUENCE ... RESTART WITH 1` でリセットする
+
+#### 実装サンプル（C# / EF Core）
+
+```csharp
+// シーケンス名（ConnectCd は英数字のみ許可してインジェクション対策）
+private static string SeqName(string connectCd)
+{
+    if (!Regex.IsMatch(connectCd, @"^[A-Za-z0-9]+$"))
+        throw new ArgumentException("Invalid ConnectCd");
+    return $"dbo.CardnetSeq_{connectCd}";
+}
+
+// 存在しなければ作成
+await context.Database.ExecuteSqlRawAsync($"""
+    IF NOT EXISTS (
+        SELECT 1 FROM sys.sequences
+        WHERE schema_id = SCHEMA_ID('dbo') AND name = 'CardnetSeq_{connectCd}'
+    )
+    CREATE SEQUENCE {SeqName(connectCd)}
+        AS BIGINT START WITH 1 INCREMENT BY 1
+        MINVALUE 1 MAXVALUE 999999999999 NO CYCLE CACHE 20
+    """);
+
+// 採番（競合しない）
+var no = await context.Database
+    .SqlQueryRaw<long>($"SELECT NEXT VALUE FOR {SeqName(connectCd)}")
+    .FirstAsync();
+var retRefNum = no.ToString("D12"); // → "000000000001"
 
 // カット時にリセット
 await context.Database.ExecuteSqlRawAsync(
