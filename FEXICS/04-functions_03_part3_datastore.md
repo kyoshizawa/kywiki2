@@ -78,7 +78,7 @@ CAFIS の日次バッチ処理において、カット（締め）処理の対�
 テーブル名：`Trn_CafisJournal`
 
 CAFIS との送受信電文を記録するテーブル。
-INSERT / DELETE のみ行い、更新はしない。
+基本的には INSERT / DELETE のみ行い、更新はしない。
 保留状態の有無は `Trn_CafisJournalHold` との LEFT JOIN で判定する（ヒットすれば保留中）。
 
 | カラム名 | 型 | NOT NULL | 説明 |
@@ -88,7 +88,7 @@ INSERT / DELETE のみ行い、更新はしない。
 | ConnectCd | VARCHAR(11) | | 処理した接続コード |
 | DeliveryCd | VARCHAR(11) | | 仕向先会社コード |
 | TerminalNo |VARCHAR(13) | | 端末番号 | 
-| SequenceNo | CHAR(6) | | 端末通番 |
+| SequenceNo | CHAR(5) | | 端末通番 |
 | TransactionDateTime | datetime | | 取引日時（レコードの処理日時ではない） |
 | Direction | CHAR(1) | ○ | 送受信区分（`S`：送信、`R`：受信） |
 | MessageType | VARCHAR(4) | ○ | 電文種別コード |
@@ -96,6 +96,7 @@ INSERT / DELETE のみ行い、更新はしない。
 | ReadableData | NVARCHAR(MAX) | | 電文のわかりやすい表現（フィールド名と値を対応させたJSON形式）※ 負荷軽減のため cli が要求したら解析してセットする |
 | SecureDataId | BIGINT | | カード番号の参照番号（SecureDB 上のカードデータ参照ID） |
 | ProcessedAt | DATETIME | ○ | 電文送受信日時 |
+| CafisNum | CHAR(6) | | 仕向処理通番。CAFISからみた取引の一意識別子 |
 | Created | DATETIME | | レコード作成日時（`DEFAULT GETDATE()`、INSERT 時に SQL Server が自動セット） |
 | Updated | DATETIME | | レコード更新日時 |
 | Modifier | VARCHAR(32) | | 最終更新者 |
@@ -132,6 +133,55 @@ CARDNET の日次バッチ処理において、カット（締め）処理の対
 | CutDate | DATE | ○ | カット対象日付（主キー） |
 | Status | CHAR(1) | ○ | 処理状態（`0`：未処理、`1`：処理中、`2`：完了） |
 | DeleteDate | DATE | ○ | 削除予定日（`CutDate` + 30日）。カット日付更新コマンド実行時にこの日付に達したレコードをジャーナルごと削除する |
+| Created | DATETIME | | レコード作成日時（`DEFAULT GETDATE()`、INSERT 時に SQL Server が自動セット） |
+| Updated | DATETIME | | レコード更新日時 |
+| Modifier | VARCHAR(32) | | 最終更新者 |
+| RowVersion | TIMESTAMP | | 行バージョン（楽観的排他制御） |
+
+---
+
+### 4.5 CARDNET ジャーナル
+
+テーブル名：`Trn_CardnetJournal`
+
+CARDNET との送受信電文を記録するテーブル。
+基本的には INSERT / DELETE のみ行い、更新はしない。
+保留状態の有無は `Trn_CardnetJournalHold` との LEFT JOIN で判定する（ヒットすれば保留中）。
+
+| カラム名 | 型 | NOT NULL | 説明 |
+| --- | --- | :---: | --- |
+| Id | BIGINT | ○ | ジャーナルID（主キー、自動採番） |
+| CutDate | DATE | ○ | カット対象日付（`Trn_CardnetCutDate.CutDate` FK、cascade delete） |
+| ConnectCd | VARCHAR(11) | | 処理した接続コード（運用識別用） |
+| DeliveryCd | VARCHAR(11) | | 仕向先会社コード（運用識別用） |
+| TerminalNo | VARCHAR(13) | | 端末番号 |
+| SequenceNo | CHAR(5) | | 端末通番 |
+| TransactionDateTime | DATETIME | | 取引日時（レコードの処理日時ではない） |
+| Direction | CHAR(1) | ○ | 送受信区分（`S`：送信、`R`：受信） |
+| MessageType | CHAR(4) | ○ | 電文種別コード（ISO 8583 MTI） |
+| RawData | VARBINARY | ○ | 電文生データ（カード情報該当箇所はトランケーション済） |
+| ReadableData | NVARCHAR(MAX) | | 電文のわかりやすい表現（フィールド名と値を対応させたJSON形式）※ 負荷軽減のため cli が要求したら解析してセットする |
+| SecureDataId | BIGINT | | カード番号の参照番号（SecureDB 上のカードデータ参照ID） |
+| ProcessedAt | DATETIME | ○ | 電文送受信日時 |
+| RetRefNum | CHAR(12) | | リトリーバルリファレンスナンバー（BIT37）。CARDNETからみた取引の一意識別子 |
+| Created | DATETIME | | レコード作成日時（`DEFAULT GETDATE()`、INSERT 時に SQL Server が自動セット） |
+| Updated | DATETIME | | レコード更新日時 |
+| Modifier | VARCHAR(32) | | 最終更新者 |
+| RowVersion | TIMESTAMP | | 行バージョン（楽観的排他制御） |
+
+---
+
+### 4.6 CARDNET ジャーナル（保留情報）
+
+テーブル名：`Trn_CardnetJournalHold`
+
+回線障害・センタ障害時に保留となった CARDNET ジャーナルを管理するテーブル。
+保留が発生したら INSERT、オンライン再開後の再送完了で DELETE する。`Trn_CardnetJournal` へのフラグ更新を嫌ってのテーブル構造。
+特にシーケンス上の問題が発生していない場合、このテーブルは件数＝０になる。
+
+| カラム名 | 型 | NOT NULL | 説明 |
+| --- | --- | :---: | --- |
+| JournalId | BIGINT | ○ | 保留対象のジャーナルID（主キー、`Trn_CardnetJournal.Id` FK、cascade delete） |
 | Created | DATETIME | | レコード作成日時（`DEFAULT GETDATE()`、INSERT 時に SQL Server が自動セット） |
 | Updated | DATETIME | | レコード更新日時 |
 | Modifier | VARCHAR(32) | | 最終更新者 |
