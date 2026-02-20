@@ -189,6 +189,29 @@ CARDNET との送受信電文を記録するテーブル。
 
 ---
 
+### 4.7 CARDNET KEK
+
+テーブル名：`Mst_CardnetKek`
+
+CARDNET センタとの通信に使用する暗号化基本キー（KEK）を接続コード単位で管理するテーブル。
+運用開始時に接続コードごとに1レコード登録する。
+
+| カラム名 | 型 | NOT NULL | 説明 |
+| --- | --- | :---: | --- |
+| ConnectCd | VARCHAR(11) | ○ | 接続コード（主キー） |
+| EncryptionMethod | CHAR(1) | ○ | KEK本体の暗号化方式 CARDNET契約とイコール（`S`：Single-DES 16桁、`T`：Triple-DES 32桁） |
+| EncryptType | INT | ○ | KEK 暗号化に使用したアルゴリズムの種類 (1: AES-256) |
+| EncryptKey | VARCHAR(MAX) | ○ | `KekJson` の暗号化に使用した AWS KMS キー |
+| KekJson | VARCHAR(MAX) | ○ | AWS KMS で暗号化された KEK 本体（JSON形式） |
+| Created | DATETIME | | レコード作成日時（`DEFAULT GETDATE()`、INSERT 時に SQL Server が自動セット） |
+| Updated | DATETIME | | レコード更新日時 |
+| Modifier | VARCHAR(32) | | 最終更新者 |
+| RowVersion | TIMESTAMP | | 行バージョン（楽観的排他制御） |
+
+> **セキュリティ注意**：KEK 本体は AWS KMS で暗号化した上で `KekJson` に保存する。`KekJson` は KMS を通じてのみ復号可能。
+
+---
+
 ## 5. シーケンス詳細
 
 ### 5.1 CAFIS 通番シーケンス
