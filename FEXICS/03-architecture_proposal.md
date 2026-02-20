@@ -76,7 +76,7 @@ FEXICSおよびCAFIS通信アプリ（AP03）を廃止し、新規に**Routing E
 | AP01 (端末間通信:閉域) | 更新 | com0x | 顧客指定での通信先切替 | 
 | AP11 (端末間通信:広域) | 更新 | com0x | 顧客指定での通信先切替 | 
 | routing engine | 新規 | - | 接続先コードによる gateway service への中継を行う |
-| gateway service | 新規 | - | CAFIS / CARDNET への接続機能 |
+| gateway service | 新規 | - | CAFIS / CARDNET への接続機能。決済ネットワーク事業者 = MC間の契約回線ごとに配置 |
 
 **CARDNET関連**
 
@@ -102,13 +102,16 @@ FEXICSおよびCAFIS通信アプリ（AP03）を廃止し、新規に**Routing E
 
 ![構成図](./img/system_architect-1a.png)
 
-
 **MEMO**
 ```
 ECS はリタイアリングにより、TCP 常時接続が維持できない。
 そのため、CAFIS / CARDNET 接続部は EC2 を使用している。
-
 ```
+
+### 備考
+
+- Routing Engine は CAFIS、CARDNET で共通のサービス構成を使用する。
+  （そのため AP02 -> CARDNET などの構成もネットワーク上は可能。これは現在 CAFIS サーバで利用している機能を CARDNET 側に繋ぎやすくするための配慮です）
 
 ---
 

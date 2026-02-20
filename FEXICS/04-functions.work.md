@@ -3,94 +3,13 @@
 
 
 
-### コンポーネント仕様
-
-#### Gateway Service
-
-
-
-## 
-
-| コンポーネント | 役割 |
-|---------------|------|
-| **Routing Engine** | 業務アプリからの電文を受信し、適切な Gateway Service に振り分ける |
-| **Gateway Service** | CAFIS/CARDNET との接続管理および電文変換を行う。決済ネットワーク事業者 = MC間の契約回線ごとに配置 |
-
-
-### 廃止対象
-
-| コンポーネント | 理由 |
-|---------------|------|
-| FEXICS | EOL対応（本プロジェクトの主目的） |
-| AP03 CAFIS通信アプリ | FEXICS前提の設計、機能を新コンポーネントに統合 |
-
-### 新規コンポーネント
-
-#### Routing Engine
-電文を解析し、仕向け先に応じて適切なGateway Serviceに振り分ける。
-
-| 機能 | 内容 |
-|------|------|
-| 電文解析 | 電文ヘッダから仕向け先を判定 |
-| ルーティング | ルーティングテーブルに基づくGateway選択 |
-| フェイルオーバー | Gateway障害時の自動切替 |
-
-#### Gateway Service
-CAFIS/CARDNETとの接続管理および電文変換を行う。回線ごとに配置。
-
-| 機能 | 内容 |
-|------|------|
-| 電文変換 | 業務アプリ ↔ CAFIS/CARDNET電文フォーマット変換 |
-| 接続管理 | CAFIS/CARDNETからの接続受付・維持（常時Listen） |
-| 障害対応 | A1/A2系切替、タイムアウト、リトライ |
-| 監査ログ | 通信ログ出力（PCI DSS対応） |
-
-### 業務アプリ側の変更
-
-| アプリ | 変更内容 |
-|--------|---------|
-| AP02 CAFIS業務処理サービス | 接続先をAP03→Routing Engineに変更 |
-| AP22 CARDNET業務サービス | 接続先をFEXICS→Routing Engineに変更 |
-
-
-
 
 ## 概要
 
 本章では、FEXICS代替として新規開発および変更が必要なコンポ－ネントの機能要件を定義する。
 機能の洗い出しは、既存コンポーネント（AP02, AP03, AP22）のソースコード調査結果に基づく。
 
-#### INDEX
 
-- 機能要件： Routing Engine
-
-
-- ユースケース
-- 機能要件（各コンポーネント機能）
-    - 共通事項
-    - Routing Engine
-    - Gateway Service
-- 機能要件（その他機能）
-    - Dummy Center
-    - Cli
-
-
-
-
-
-
-- Routing Engine は CAFIS、CARDNET で共通のサービス構成を使用します。
-  （AP02 -> CARDNET などの構成もネットワーク上は可能。
-    これは現在 CAFIS サーバで利用している機能を CARDNET 側に繋ぎやすくするための考慮です）
-
-- 処理は必ず Routing Engine 経由で行われます。
-  Routing Engine は 受けた処理要求から CAFIS | CARDNET のどちらに接続するかを判断し、
-  対応する Gateway Service にルーティングします。
-
-- 受けた電文がどちらの仕様で動作するかは、各々の Gateway Service の起動設定で決定します。
-  (Strategy Pattern の実装イメージ)
-
-- Gateway Service は 各サービス タスク数 = 1 で運用します。
 
 #### [処理フロー]
 
