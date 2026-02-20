@@ -53,9 +53,9 @@ CAFIS/CARDNET ともに電文に使用した最新通番を永続化する必要
 
 SEQUENCEは接続先コード毎に定義され、存在しない場合はアプリケーションが動的にCREATEする。
 
-## 4. テーブル詳細
+### 4. テーブル詳細
 
-### 4.1 CAFIS カット対象日付
+#### 4.1 CAFIS カット対象日付
 
 テーブル名：`Trn_CafisCutDate`
 
@@ -73,7 +73,7 @@ CAFIS の日次バッチ処理において、カット（締め）処理の対�
 
 ---
 
-### 4.2 CAFIS ジャーナル
+#### 4.2 CAFIS ジャーナル
 
 テーブル名：`Trn_CafisJournal`
 
@@ -104,7 +104,7 @@ CAFIS との送受信電文を記録するテーブル。
 
 ---
 
-### 4.3 CAFIS ジャーナル（保留情報）
+#### 4.3 CAFIS ジャーナル（保留情報）
 
 テーブル名：`Trn_CafisJournalHold`
 
@@ -122,7 +122,7 @@ CAFIS との送受信電文を記録するテーブル。
 
 ---
 
-### 4.4 CARDNET カット対象日付
+#### 4.4 CARDNET カット対象日付
 
 テーブル名：`Trn_CardnetCutDate`
 
@@ -140,7 +140,7 @@ CARDNET の日次バッチ処理において、カット（締め）処理の対
 
 ---
 
-### 4.5 CARDNET ジャーナル
+#### 4.5 CARDNET ジャーナル
 
 テーブル名：`Trn_CardnetJournal`
 
@@ -171,7 +171,7 @@ CARDNET との送受信電文を記録するテーブル。
 
 ---
 
-### 4.6 CARDNET ジャーナル（保留情報）
+#### 4.6 CARDNET ジャーナル（保留情報）
 
 テーブル名：`Trn_CardnetJournalHold`
 
@@ -189,7 +189,7 @@ CARDNET との送受信電文を記録するテーブル。
 
 ---
 
-### 4.7 CARDNET KEK
+#### 4.7 CARDNET KEK
 
 テーブル名：`Mst_CardnetKek`
 
@@ -212,9 +212,9 @@ CARDNET センタとの通信に使用する暗号化基本キー（KEK）を接
 
 ---
 
-## 5. シーケンス詳細
+### 5. シーケンス詳細
 
-### 5.1 CAFIS 通番シーケンス
+#### 5.1 CAFIS 通番シーケンス
 
 テーブルなし。SQL Server の **SEQUENCE オブジェクト**で管理する。
 
@@ -258,7 +258,7 @@ await context.Database.ExecuteSqlRawAsync(
 
 ---
 
-### 5.2 CARDNET 通番シーケンス
+#### 5.2 CARDNET 通番シーケンス
 
 テーブルなし。SQL Server の **SEQUENCE オブジェクト**で管理する。
 
