@@ -109,10 +109,29 @@ INSERT / DELETE のみ行い、更新はしない。
 
 回線障害・センタ障害時に保留となった CAFIS ジャーナルを管理するテーブル。
 保留が発生したら INSERT、オンライン再開後の再送完了で DELETE する。`Trn_CafisJournal` へのフラグ更新を嫌ってのテーブル構造。
+特にシーケンス上の問題が発生していない場合、このテーブルは件数＝０になる。
 
 | カラム名 | 型 | NOT NULL | 説明 |
 | --- | --- | :---: | --- |
 | JournalId | BIGINT | ○ | 保留対象のジャーナルID（主キー、`Trn_CafisJournal.Id` FK、cascade delete） |
+| Created | DATETIME | | レコード作成日時（`DEFAULT GETDATE()`、INSERT 時に SQL Server が自動セット） |
+| Updated | DATETIME | | レコード更新日時 |
+| Modifier | VARCHAR(32) | | 最終更新者 |
+| RowVersion | TIMESTAMP | | 行バージョン（楽観的排他制御） |
+
+---
+
+### 4.4 CARDNET カット対象日付
+
+テーブル名：`Trn_CardnetCutDate`
+
+CARDNET の日次バッチ処理において、カット（締め）処理の対象となる日付を管理するテーブル。
+
+| カラム名 | 型 | NOT NULL | 説明 |
+| --- | --- | :---: | --- |
+| CutDate | DATE | ○ | カット対象日付（主キー） |
+| Status | CHAR(1) | ○ | 処理状態（`0`：未処理、`1`：処理中、`2`：完了） |
+| DeleteDate | DATE | ○ | 削除予定日（`CutDate` + 30日）。カット日付更新コマンド実行時にこの日付に達したレコードをジャーナルごと削除する |
 | Created | DATETIME | | レコード作成日時（`DEFAULT GETDATE()`、INSERT 時に SQL Server が自動セット） |
 | Updated | DATETIME | | レコード更新日時 |
 | Modifier | VARCHAR(32) | | 最終更新者 |
@@ -165,20 +184,3 @@ await context.Database.ExecuteSqlRawAsync(
     $"ALTER SEQUENCE {SeqName(connectCd)} RESTART WITH 1");
 ```
 
----
-
-### 3.5 CARDNET カット対象日付
-
-テーブル名：`Trn_CardnetCutDate`
-
-CARDNET の日次バッチ処理において、カット（締め）処理の対象となる日付を管理するテーブル。
-
-| カラム名 | 型 | NOT NULL | 説明 |
-| --- | --- | :---: | --- |
-| CutDate | DATE | ○ | カット対象日付（主キー） |
-| Status | CHAR(1) | ○ | 処理状態（`0`：未処理、`1`：処理中、`2`：完了） |
-| DeleteDate | DATE | ○ | 削除予定日（`CutDate` + 30日）。カット日付更新コマンド実行時にこの日付に達したレコードをジャーナルごと削除する |
-| Created | DATETIME | | レコード作成日時（`DEFAULT GETDATE()`、INSERT 時に SQL Server が自動セット） |
-| Updated | DATETIME | | レコード更新日時 |
-| Modifier | VARCHAR(32) | | 最終更新者 |
-| RowVersion | TIMESTAMP | | 行バージョン（楽観的排他制御） |
