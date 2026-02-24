@@ -49,7 +49,7 @@ CAFIS/CARDNET ともに電文に使用した最新通番を永続化する必要
 - CAFIS 通番シーケンス（SQL Server SEQUENCE オブジェクト、テーブルなし）
   - 対象データ： 仕向処理通番
 - CARDNET 通番シーケンス（SQL Server SEQUENCE オブジェクト、テーブルなし）
-  - 対象データ： リトリーバルリファレンスナンバー
+  - 対象データ： システムトレースオーディットナンバー（STAN / BIT11）
 
 SEQUENCEは接続先コード毎に定義され、存在しない場合はアプリケーションが動的にCREATEする。
 
@@ -163,7 +163,7 @@ CARDNET との送受信電文を記録するテーブル。
 | ReadableData | NVARCHAR(MAX) | | 電文のわかりやすい表現（フィールド名と値を対応させたJSON形式）※ 負荷軽減のため cli が要求したら解析してセットする |
 | SecureDataId | BIGINT | | カード番号の参照番号（SecureDB 上のカードデータ参照ID） |
 | ProcessedAt | DATETIME | ○ | 電文送受信日時 |
-| RetRefNum | CHAR(12) | | リトリーバルリファレンスナンバー（BIT37）。CARDNETからみた取引の一意識別子 |
+| StanNum | CHAR(6) | | システムトレースオーディットナンバー（STAN / BIT11）。取引の一意識別子 |
 | Created | DATETIME | | レコード作成日時（`DEFAULT GETDATE()`、INSERT 時に SQL Server が自動セット） |
 | Updated | DATETIME | | レコード更新日時 |
 | Modifier | VARCHAR(32) | | 最終更新者 |
@@ -262,11 +262,14 @@ await context.Database.ExecuteSqlRawAsync(
 
 テーブルなし。SQL Server の **SEQUENCE オブジェクト**で管理する。
 
-- 対象：リトリーバルリファレンスナンバー（`RetRefNum`、12桁）
+- 対象：システムトレースオーディットナンバー（STAN / BIT11、6桁）
 - 命名規則：`dbo.CardnetSeq_{ConnectCd}`（例：`dbo.CardnetSeq_3M308090003`）
 - 接続コードごとに1オブジェクト。初回使用時に動的 `CREATE SEQUENCE` する
 - `NEXT VALUE FOR` はアトミックのため、コンカレント呼び出しでも競合しない
 - カット時に `ALTER SEQUENCE ... RESTART WITH 1` でリセットする
+
+> **BIT37 リトリーバルリファレンスナンバー（RRN）** は BIT11 STAN から派生させる（例：`YYJJJ` + STAN6桁など）。
+> RRN の具体的な構築ルールは CARDNET 仕様書・運用規定に従うこと。
 
 #### 実装サンプル（C# / EF Core）
 
@@ -286,15 +289,15 @@ await context.Database.ExecuteSqlRawAsync($"""
         WHERE schema_id = SCHEMA_ID('dbo') AND name = 'CardnetSeq_{connectCd}'
     )
     CREATE SEQUENCE {SeqName(connectCd)}
-        AS BIGINT START WITH 1 INCREMENT BY 1
-        MINVALUE 1 MAXVALUE 999999999999 NO CYCLE CACHE 20
+        AS INT START WITH 1 INCREMENT BY 1
+        MINVALUE 1 MAXVALUE 999999 NO CYCLE CACHE 20
     """);
 
 // 採番（競合しない）
 var no = await context.Database
-    .SqlQueryRaw<long>($"SELECT NEXT VALUE FOR {SeqName(connectCd)}")
+    .SqlQueryRaw<int>($"SELECT NEXT VALUE FOR {SeqName(connectCd)}")
     .FirstAsync();
-var retRefNum = no.ToString("D12"); // → "000000000001"
+var stanNum = no.ToString("D6"); // → "000001"
 
 // カット時にリセット
 await context.Database.ExecuteSqlRawAsync(
