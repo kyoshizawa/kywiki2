@@ -6,7 +6,11 @@
       "Bash(done)",
       "Bash(wsl bash:*)",
       "Bash(powershell -command \"wsl --list --running\")",
-      "Bash(powershell -command \"Get-ChildItem -LiteralPath ''\\\\\\\\wsl$\\\\Ubuntu\\\\home\\\\k_yoshizawa\\\\src\\\\MobileCreate_pj'' -ErrorAction SilentlyContinue | Select-Object Name\")"
+      "Bash(powershell -command \"Get-ChildItem -LiteralPath ''\\\\\\\\wsl$\\\\Ubuntu\\\\home\\\\k_yoshizawa\\\\src\\\\MobileCreate_pj'' -ErrorAction SilentlyContinue | Select-Object Name\")",
+      "Bash(git:)",
+      "Bash(git:*)",
+      "Bash(powershell:)",
+      "Bash(cmd)"
     ]
   }
 }
