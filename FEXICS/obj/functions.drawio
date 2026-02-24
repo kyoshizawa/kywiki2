@@ -54,37 +54,31 @@
     </mxGraphModel>
   </diagram>
   <diagram name="usecase2" id="fnVWuIVl-aSqplYxHGgM">
-    <mxGraphModel dx="1426" dy="875" grid="0" gridSize="10" guides="0" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+    <mxGraphModel dx="1042" dy="626" grid="0" gridSize="10" guides="0" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
         <mxCell id="zqL0RQsZkE5-phiI_7mg-0" />
         <mxCell id="zqL0RQsZkE5-phiI_7mg-1" parent="zqL0RQsZkE5-phiI_7mg-0" />
-        <mxCell id="zqL0RQsZkE5-phiI_7mg-3" value="EC2 :&lt;div&gt;CFSサーバ&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="zqL0RQsZkE5-phiI_7mg-1">
-          <mxGeometry x="228" y="35" width="141" height="38" as="geometry" />
+        <mxCell id="2Kkzg06oq_EoJ-VaTbkq-0" value="EC2: Gateway サーバ内" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;" vertex="1" parent="zqL0RQsZkE5-phiI_7mg-1">
+          <mxGeometry x="183" y="16" width="370" height="98" as="geometry" />
         </mxCell>
-        <mxCell id="zqL0RQsZkE5-phiI_7mg-6" value="Routing Engine" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#0E1EFF;" vertex="1" parent="zqL0RQsZkE5-phiI_7mg-1">
-          <mxGeometry x="413" y="35" width="126" height="38" as="geometry" />
+        <mxCell id="zqL0RQsZkE5-phiI_7mg-3" value="cli" style="rounded=1;whiteSpace=wrap;html=1;" parent="zqL0RQsZkE5-phiI_7mg-1" vertex="1">
+          <mxGeometry x="228" y="50" width="141" height="38" as="geometry" />
         </mxCell>
-        <mxCell id="zqL0RQsZkE5-phiI_7mg-7" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#0E1EFF;" edge="1" parent="zqL0RQsZkE5-phiI_7mg-1" source="zqL0RQsZkE5-phiI_7mg-3" target="zqL0RQsZkE5-phiI_7mg-6">
+        <mxCell id="zqL0RQsZkE5-phiI_7mg-7" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#0E1EFF;" parent="zqL0RQsZkE5-phiI_7mg-1" source="zqL0RQsZkE5-phiI_7mg-3" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="366" y="52" as="sourcePoint" />
-            <mxPoint x="532" y="205" as="targetPoint" />
+            <mxPoint x="366" y="67" as="sourcePoint" />
+            <mxPoint x="413" y="69" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="zqL0RQsZkE5-phiI_7mg-8" value="Gateway Service" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#0019FF;" vertex="1" parent="zqL0RQsZkE5-phiI_7mg-1">
-          <mxGeometry x="571" y="35" width="85" height="38" as="geometry" />
+        <mxCell id="zqL0RQsZkE5-phiI_7mg-8" value="Gateway Service" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#0019FF;" parent="zqL0RQsZkE5-phiI_7mg-1" vertex="1">
+          <mxGeometry x="414" y="51" width="85" height="38" as="geometry" />
         </mxCell>
-        <mxCell id="zqL0RQsZkE5-phiI_7mg-9" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;strokeColor=#0019FF;" edge="1" parent="zqL0RQsZkE5-phiI_7mg-1" source="zqL0RQsZkE5-phiI_7mg-6" target="zqL0RQsZkE5-phiI_7mg-8">
-          <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="585" y="148" as="sourcePoint" />
-            <mxPoint x="635" y="98" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="zqL0RQsZkE5-phiI_7mg-10" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="zqL0RQsZkE5-phiI_7mg-1">
+        <mxCell id="zqL0RQsZkE5-phiI_7mg-10" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="zqL0RQsZkE5-phiI_7mg-1" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="880" y="251" as="sourcePoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="zqL0RQsZkE5-phiI_7mg-12" value="cli による運用&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;操作&lt;/span&gt;" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;size=34;position=0.47;direction=west;fillColor=#CCE5FF;strokeColor=#6c8ebf;" vertex="1" parent="zqL0RQsZkE5-phiI_7mg-1">
+        <mxCell id="zqL0RQsZkE5-phiI_7mg-12" value="cli による運用&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;操作&lt;/span&gt;" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;size=34;position=0.47;direction=west;fillColor=#CCE5FF;strokeColor=#6c8ebf;" parent="zqL0RQsZkE5-phiI_7mg-1" vertex="1">
           <mxGeometry x="231" y="77" width="120" height="74" as="geometry" />
         </mxCell>
       </root>

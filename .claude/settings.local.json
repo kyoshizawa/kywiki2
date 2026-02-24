@@ -4,7 +4,9 @@
       "Bash(for f in *FEXICS_API_Reference*.md)",
       "Bash(do git mv \"$f\" \"FEXICS_API_Reference/\")",
       "Bash(done)",
-      "Bash(wsl bash:*)"
+      "Bash(wsl bash:*)",
+      "Bash(powershell -command \"wsl --list --running\")",
+      "Bash(powershell -command \"Get-ChildItem -LiteralPath ''\\\\\\\\wsl$\\\\Ubuntu\\\\home\\\\k_yoshizawa\\\\src\\\\MobileCreate_pj'' -ErrorAction SilentlyContinue | Select-Object Name\")"
     ]
   }
 }

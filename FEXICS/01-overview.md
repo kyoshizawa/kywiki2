@@ -94,7 +94,7 @@ CAFIS/CARDNET接続用ネットワーク中継パッケージソフト「FEXICS�
 
 ## 7. 関連資料
 
-以下に保存
+- CAFIS仕様・CARDNET仕様等、必要となる外部サービス情報は以下に格納している。
 
 https://github.com/MobileCreate/pay_pf_doc_wk/tree/main/docs/FEXICS
 
