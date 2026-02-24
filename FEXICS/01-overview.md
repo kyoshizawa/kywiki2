@@ -98,3 +98,8 @@ CAFIS/CARDNET接続用ネットワーク中継パッケージソフト「FEXICS�
 
 https://github.com/MobileCreate/pay_pf_doc_wk/tree/main/docs/FEXICS
 
+## 8. その他留意事項等
+
+- CAFISの回線プラン "プラチナ２" がサービス提供終了となる。(2026年中)
+- 新設する本番回線については、新規の回線プランを使用した接続とする。
+
