@@ -151,6 +151,13 @@ CAFIS との送受信電文を記録するテーブル。
 | Updated | TEXT | | レコード更新日時 |
 | Modifier | TEXT | | 最終更新者 |
 
+**インデックス**
+
+| インデックス名 | カラム | 目的 |
+| --- | --- | --- |
+| `IX_CafisJournal_Terminal` | `(TerminalNo, SequenceNo)` | 端末番号＋端末通番による取引単位検索 |
+| `IX_CafisJournal_ProcessedAt` | `(ProcessedAt)` | 処理日時による範囲検索 |
+
 ---
 
 #### 4.3 CAFIS ジャーナル（保留情報）
@@ -216,6 +223,13 @@ CARDNET との送受信電文を記録するテーブル。
 | Created | TEXT | | レコード作成日時（`DEFAULT (datetime('now'))`、INSERT 時に自動セット） |
 | Updated | TEXT | | レコード更新日時 |
 | Modifier | TEXT | | 最終更新者 |
+
+**インデックス**
+
+| インデックス名 | カラム | 目的 |
+| --- | --- | --- |
+| `IX_CardnetJournal_Terminal` | `(TerminalNo, SequenceNo)` | 端末番号＋端末通番による取引単位検索 |
+| `IX_CardnetJournal_ProcessedAt` | `(ProcessedAt)` | 処理日時による範囲検索 |
 
 ---
 
