@@ -105,6 +105,8 @@ FEXICSおよびCAFIS通信アプリ（AP03）を廃止し、新規に**Routing E
 
 ![構成図](./img/system_architect-1a.png)
 
+※ 注： CARDNET のみ GatewayService → CARDNET への outbound が発生(TCP:2200)
+
 **MEMO**
 ```
 ECS はリタイアリングにより、TCP 常時接続が維持できない。
