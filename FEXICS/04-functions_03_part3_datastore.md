@@ -81,10 +81,12 @@ SQLite3 はカラム型をアフィニティで管理する。テーブル定義
 - CAFIS カット対象日付
 - CAFIS ジャーナル
 - CAFIS ジャーナル（保留情報）
+- CAFIS 通番シーケンス
 - CARDNET カット対象日付
 - CARDNET ジャーナル
 - CARDNET ジャーナル（保留情報）
 - CARDNET KEK
+- CARDNET 通番シーケンス
 
 テーブル構造の定義は migration を利用し、アプリケーションの起動とともにスキーマ構成を行うこととする。
 
@@ -99,14 +101,7 @@ SQLite3 はカラム型をアフィニティで管理する。テーブル定義
 
 CAFIS/CARDNET ともに電文に使用した最新通番を永続化する必要がある。
 SQLite3 には SEQUENCE オブジェクトが存在しないため、専用のシーケンステーブルで管理する。
-Gateway Service は回線ごとに単一インスタンスのため、concurrent write による競合は発生しない。
-
-- CAFIS 通番シーケンス（SQLite3 シーケンステーブル）
-  - 対象データ： 仕向処理通番
-- CARDNET 通番シーケンス（SQLite3 シーケンステーブル）
-  - 対象データ： システムトレースオーディットナンバー（STAN / BIT11）
-
-シーケンステーブルは接続コード毎に1レコードで管理し、存在しない場合はアプリケーションが動的にINSERTする。
+テーブル詳細は 4.8・4.9 を参照。
 
 ### 4. テーブル詳細
 
@@ -266,97 +261,36 @@ CARDNET センタとの通信に使用する暗号化基本キー（KEK）を接
 
 ---
 
-### 5. シーケンス詳細
+#### 4.8 CAFIS 通番シーケンス
 
-#### 5.1 CAFIS 通番シーケンス
+テーブル名：`Trn_CafisSeq`
+想定操作：INSERT / UPDATE
 
-SQLite3 の **シーケンステーブル**で管理する。
+CAFIS 電文の仕向処理通番を接続コード単位で管理するテーブル。
+接続コードごとに1レコード。初回使用時にアプリケーションが動的に INSERT する。
+カット時に `CurrentVal = 0` にリセットする。
+更新にあたってはアプリケーションで排他制御を行うこと。
 
-- テーブル名：`CafisSeq`
-- 接続コードごとに1レコード。初回使用時にアプリケーションが動的に `INSERT` する
-- Gateway Service は単一インスタンスのため concurrent write による競合は発生しない
-- カット時に `CurrentVal = 0` にリセットする
-
-```sql
-CREATE TABLE IF NOT EXISTS CafisSeq (
-    ConnectCd TEXT PRIMARY KEY,
-    CurrentVal INTEGER NOT NULL DEFAULT 0
-);
-```
-
-#### 実装サンプル（C# / Microsoft.Data.Sqlite）
-
-```csharp
-// 存在しなければ作成
-await connection.ExecuteAsync("""
-    INSERT OR IGNORE INTO CafisSeq (ConnectCd, CurrentVal)
-    VALUES (@cd, 0)
-    """, new { cd = connectCd });
-
-// 採番
-await connection.ExecuteAsync("""
-    UPDATE CafisSeq SET CurrentVal = CurrentVal + 1
-    WHERE ConnectCd = @cd
-    """, new { cd = connectCd });
-
-var no = await connection.ExecuteScalarAsync<int>(
-    "SELECT CurrentVal FROM CafisSeq WHERE ConnectCd = @cd",
-    new { cd = connectCd });
-
-var sequenceNo = no.ToString("D6"); // → "000001"
-
-// カット時にリセット
-await connection.ExecuteAsync(
-    "UPDATE CafisSeq SET CurrentVal = 0 WHERE ConnectCd = @cd",
-    new { cd = connectCd });
-```
+| カラム名 | 型 | NOT NULL | 説明 |
+| --- | --- | :---: | --- |
+| ConnectCd | TEXT | ○ | 接続コード（主キー） |
+| CurrentVal | INTEGER | ○ | 現在の通番値（`DEFAULT 0`） |
 
 ---
 
-#### 5.2 CARDNET 通番シーケンス
+#### 4.9 CARDNET 通番シーケンス
 
-SQLite3 の **シーケンステーブル**で管理する。
+テーブル名：`Trn_CardnetSeq`
+想定操作：INSERT / UPDATE
 
-- 対象：システムトレースオーディットナンバー（STAN / BIT11、6桁）
-- テーブル名：`CardnetSeq`
-- 接続コードごとに1レコード。初回使用時にアプリケーションが動的に `INSERT` する
-- Gateway Service は単一インスタンスのため concurrent write による競合は発生しない
-- カット時に `CurrentVal = 0` にリセットする
+CARDNET 電文のシステムトレースオーディットナンバー（STAN / BIT11）を接続コード単位で管理するテーブル。
+接続コードごとに1レコード。初回使用時にアプリケーションが動的に INSERT する。
+カット時に `CurrentVal = 0` にリセットする。
+更新にあたってはアプリケーションで排他制御を行うこと。
 
-> **BIT37 リトリーバルリファレンスナンバー（RRN）** は BIT11 STAN から派生させる（例：`YYJJJ` + STAN6桁など）。
-> RRN の具体的な構築ルールは CARDNET 仕様書・運用規定に従うこと。
+| カラム名 | 型 | NOT NULL | 説明 |
+| --- | --- | :---: | --- |
+| ConnectCd | TEXT | ○ | 接続コード（主キー） |
+| CurrentVal | INTEGER | ○ | 現在の通番値（`DEFAULT 0`） |
 
-```sql
-CREATE TABLE IF NOT EXISTS CardnetSeq (
-    ConnectCd TEXT PRIMARY KEY,
-    CurrentVal INTEGER NOT NULL DEFAULT 0
-);
-```
-
-#### 実装サンプル（C# / Microsoft.Data.Sqlite）
-
-```csharp
-// 存在しなければ作成
-await connection.ExecuteAsync("""
-    INSERT OR IGNORE INTO CardnetSeq (ConnectCd, CurrentVal)
-    VALUES (@cd, 0)
-    """, new { cd = connectCd });
-
-// 採番
-await connection.ExecuteAsync("""
-    UPDATE CardnetSeq SET CurrentVal = CurrentVal + 1
-    WHERE ConnectCd = @cd
-    """, new { cd = connectCd });
-
-var no = await connection.ExecuteScalarAsync<int>(
-    "SELECT CurrentVal FROM CardnetSeq WHERE ConnectCd = @cd",
-    new { cd = connectCd });
-
-var stanNum = no.ToString("D6"); // → "000001"
-
-// カット時にリセット
-await connection.ExecuteAsync(
-    "UPDATE CardnetSeq SET CurrentVal = 0 WHERE ConnectCd = @cd",
-    new { cd = connectCd });
-```
 
