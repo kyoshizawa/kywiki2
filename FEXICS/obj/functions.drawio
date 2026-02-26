@@ -374,59 +374,65 @@
         <mxCell id="6nL65-EERR-a4Y-V4HI1-31" value="more columns,,," style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="6nL65-EERR-a4Y-V4HI1-29" vertex="1">
           <mxGeometry y="60" width="158" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="CZsKEReGjGB5TM9rnTPn-1" value="CAFIS最新通番情報（SEQUENCE）" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" parent="UeIP1tvb-Lf8Th1-A500-1" vertex="1">
-          <mxGeometry x="644" y="74" width="167" height="39" as="geometry" />
-        </mxCell>
-        <mxCell id="CZsKEReGjGB5TM9rnTPn-2" value="CARDNET最新通番情報（SEQUENCE）" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" parent="UeIP1tvb-Lf8Th1-A500-1" vertex="1">
-          <mxGeometry x="646" y="156" width="167" height="39" as="geometry" />
-        </mxCell>
-        <mxCell id="CZsKEReGjGB5TM9rnTPn-3" value="※&amp;nbsp;仕向処理通番の発行" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="UeIP1tvb-Lf8Th1-A500-1" vertex="1">
-          <mxGeometry x="667" y="112" width="159" height="30" as="geometry" />
-        </mxCell>
-        <mxCell id="CZsKEReGjGB5TM9rnTPn-4" value="※&amp;nbsp;&lt;span style=&quot;text-align: left;&quot;&gt;リトリーバルリファレンスナンバー&lt;/span&gt;の発行" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="UeIP1tvb-Lf8Th1-A500-1" vertex="1">
-          <mxGeometry x="662" y="198" width="285" height="30" as="geometry" />
-        </mxCell>
-        <mxCell id="SmCG2H-eK-nYX53z3tbv-0" value="CAFISジャーナル（保留情報）" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="UeIP1tvb-Lf8Th1-A500-1">
+        <mxCell id="SmCG2H-eK-nYX53z3tbv-0" value="CAFISジャーナル（保留情報）" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="UeIP1tvb-Lf8Th1-A500-1" vertex="1">
           <mxGeometry x="147" y="347" width="167" height="90" as="geometry" />
         </mxCell>
-        <mxCell id="SmCG2H-eK-nYX53z3tbv-1" value="対象のジャーナルID" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="SmCG2H-eK-nYX53z3tbv-0">
+        <mxCell id="SmCG2H-eK-nYX53z3tbv-1" value="対象のジャーナルID" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="SmCG2H-eK-nYX53z3tbv-0" vertex="1">
           <mxGeometry y="30" width="167" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="SmCG2H-eK-nYX53z3tbv-2" value="more columns,,," style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="SmCG2H-eK-nYX53z3tbv-0">
+        <mxCell id="SmCG2H-eK-nYX53z3tbv-2" value="more columns,,," style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="SmCG2H-eK-nYX53z3tbv-0" vertex="1">
           <mxGeometry y="60" width="167" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="SmCG2H-eK-nYX53z3tbv-3" value="CARDNETジャーナル（保留情報）" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="UeIP1tvb-Lf8Th1-A500-1">
+        <mxCell id="SmCG2H-eK-nYX53z3tbv-3" value="CARDNETジャーナル（保留情報）" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="UeIP1tvb-Lf8Th1-A500-1" vertex="1">
           <mxGeometry x="371" y="347" width="195" height="90" as="geometry" />
         </mxCell>
-        <mxCell id="SmCG2H-eK-nYX53z3tbv-4" value="対象のジャーナルID" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="SmCG2H-eK-nYX53z3tbv-3">
+        <mxCell id="SmCG2H-eK-nYX53z3tbv-4" value="対象のジャーナルID" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="SmCG2H-eK-nYX53z3tbv-3" vertex="1">
           <mxGeometry y="30" width="195" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="SmCG2H-eK-nYX53z3tbv-5" value="more columns,,," style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="SmCG2H-eK-nYX53z3tbv-3">
+        <mxCell id="SmCG2H-eK-nYX53z3tbv-5" value="more columns,,," style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="SmCG2H-eK-nYX53z3tbv-3" vertex="1">
           <mxGeometry y="60" width="195" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="SmCG2H-eK-nYX53z3tbv-6" value="" style="endArrow=none;html=1;rounded=0;entryX=0.514;entryY=0.967;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="UeIP1tvb-Lf8Th1-A500-1">
+        <mxCell id="SmCG2H-eK-nYX53z3tbv-6" value="" style="endArrow=none;html=1;rounded=0;entryX=0.514;entryY=0.967;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" parent="UeIP1tvb-Lf8Th1-A500-1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="216" y="345" as="sourcePoint" />
             <mxPoint x="216" y="302" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="SmCG2H-eK-nYX53z3tbv-7" value="1" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="UeIP1tvb-Lf8Th1-A500-1">
+        <mxCell id="SmCG2H-eK-nYX53z3tbv-7" value="1" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="UeIP1tvb-Lf8Th1-A500-1" vertex="1">
           <mxGeometry x="200" y="298" width="60" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="SmCG2H-eK-nYX53z3tbv-8" value="0..1" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="UeIP1tvb-Lf8Th1-A500-1">
+        <mxCell id="SmCG2H-eK-nYX53z3tbv-8" value="0..1" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="UeIP1tvb-Lf8Th1-A500-1" vertex="1">
           <mxGeometry x="206" y="323" width="60" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="SmCG2H-eK-nYX53z3tbv-9" value="" style="endArrow=none;html=1;rounded=0;entryX=0.514;entryY=0.967;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="UeIP1tvb-Lf8Th1-A500-1">
+        <mxCell id="SmCG2H-eK-nYX53z3tbv-9" value="" style="endArrow=none;html=1;rounded=0;entryX=0.514;entryY=0.967;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" parent="UeIP1tvb-Lf8Th1-A500-1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="456" y="345" as="sourcePoint" />
             <mxPoint x="456" y="302" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="SmCG2H-eK-nYX53z3tbv-10" value="1" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="UeIP1tvb-Lf8Th1-A500-1">
+        <mxCell id="SmCG2H-eK-nYX53z3tbv-10" value="1" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="UeIP1tvb-Lf8Th1-A500-1" vertex="1">
           <mxGeometry x="440" y="298" width="60" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="SmCG2H-eK-nYX53z3tbv-11" value="0..1" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="UeIP1tvb-Lf8Th1-A500-1">
+        <mxCell id="SmCG2H-eK-nYX53z3tbv-11" value="0..1" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="UeIP1tvb-Lf8Th1-A500-1" vertex="1">
           <mxGeometry x="446" y="323" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="48jpcN9XlEP32E7erpJY-0" value="&lt;span style=&quot;color: rgb(51, 51, 51);&quot;&gt;CAFIS最新通番情報&lt;/span&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="UeIP1tvb-Lf8Th1-A500-1">
+          <mxGeometry x="618" y="75" width="162" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="48jpcN9XlEP32E7erpJY-1" value="&lt;span style=&quot;text-align: center;&quot;&gt;※&amp;nbsp;仕向処理通番&lt;/span&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="48jpcN9XlEP32E7erpJY-0">
+          <mxGeometry y="30" width="162" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="48jpcN9XlEP32E7erpJY-2" value="more columns,,," style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="48jpcN9XlEP32E7erpJY-0">
+          <mxGeometry y="60" width="162" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="48jpcN9XlEP32E7erpJY-3" value="&lt;span style=&quot;color: rgb(51, 51, 51);&quot;&gt;CARDNET最新通番情報&lt;/span&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="UeIP1tvb-Lf8Th1-A500-1">
+          <mxGeometry x="619" y="180" width="162" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="48jpcN9XlEP32E7erpJY-4" value="&lt;span style=&quot;text-align: center;&quot;&gt;※ システムトレースオーディットナンバー&lt;/span&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="48jpcN9XlEP32E7erpJY-3">
+          <mxGeometry y="30" width="162" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="48jpcN9XlEP32E7erpJY-5" value="more columns,,," style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="48jpcN9XlEP32E7erpJY-3">
+          <mxGeometry y="60" width="162" height="30" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
