@@ -4,19 +4,59 @@
 
 #### サーバ
 
-- 既存サーバ `secdb0x` を使用する。
+- 通信のボトルネックを考慮し、ローカル保存とする。
 
-#### カタログ
+#### 保存ファイル名
 
-- 新規カタログとして、以下を定義する
+- DB エンジンとして **SQLite3** を使用する。
+- 回線ごとに Gateway Service が1インスタンス起動するため、DBファイルも回線ごとに独立して配置する。
 
-    | カタログ名 | 用途 |
+    | ファイル名（例） | 用途 |
     | --- | --- |
-    | Journal | Gateway 専用のデータストア |
+    | `journal_{ConnectCd}.db` | 接続コード単位の Gateway 専用データストア |
+
+    **MEMO:方式の比較**
+    ```                                                                 
+    ┌────────────────────────┬──────────────────────────────────────┬──────────────────────────────┐
+    │          観点          │         フォーマットファイル         │           SQLite3            │
+    ├────────────────────────┼──────────────────────────────────────┼──────────────────────────────┤
+    │ 書き込み速度           │ 最速（I/Oのみ）                      │ 軽量DBとして十分速い         │
+    ├────────────────────────┼──────────────────────────────────────┼──────────────────────────────┤
+    │ concurrent write       │ ロック制御が必要                     │ WALモードで対応可            │
+    ├────────────────────────┼──────────────────────────────────────┼──────────────────────────────┤
+    │ 検索・参照             │ 難しい（cli対応が困難）              │ SQL で容易                   │
+    ├────────────────────────┼──────────────────────────────────────┼──────────────────────────────┤
+    │ 30日保持＆削除         │ ファイル単位のローテーションで対応可 │ DELETE文で管理               │
+    ├────────────────────────┼──────────────────────────────────────┼──────────────────────────────┤
+    │ 保留情報の管理         │ テーブル間結合が使えない             │ JOIN で現設計をほぼ踏襲可    │
+    ├────────────────────────┼──────────────────────────────────────┼──────────────────────────────┤
+    │ .NET サポート          │ —                                    │ Microsoft.Data.Sqlite で良好 │
+    ├────────────────────────┼──────────────────────────────────────┼──────────────────────────────┤
+    │ 運用（バックアップ等） │ ファイルコピーで完結                 │ ファイルコピーで完結         │
+    └────────────────────────┴──────────────────────────────────────┴──────────────────────────────┘
+    ```
+
+
+#### 型の対応
+
+SQLite3 はカラム型をアフィニティで管理する。テーブル定義中の SQL Server 型は以下のとおり読み替える。
+
+| SQL Server 型 | SQLite3 アフィニティ |
+| --- | --- |
+| BIGINT / INT | INTEGER |
+| VARCHAR / NVARCHAR / CHAR | TEXT |
+| DATETIME / DATE | TEXT（ISO 8601形式） |
+| VARBINARY | BLOB |
+| TIMESTAMP（行バージョン） | 省略 |
 
 #### 保持期間の定義
 
-ジャーナルレコードは保存から３０日保持する。
+ジャーナルレコードは保存から７日保持する。
+
+**MEMO:**
+```
+一日の想定レコード数は 100000件ほど。
+```
 
 #### セキュリティ配慮
 
@@ -36,28 +76,33 @@
 - CARDNET ジャーナル（保留情報）
 - CARDNET KEK
 
+テーブル構造の定義は migration を利用し、アプリケーションの起動とともにスキーマ構成を行うこととする。
+
 #### リレーション
 
 ![図](./img/datastore_1-1.png)
 
-### 3. シーケンス定義一覧
+※ SQLITEでも有効にすることでリレーションを扱える
 
-CAFIS/CARDNET ともに電文に使用した最新通番を永続化する必要がある。  
-テーブル保存の場合、UPDATE によるパフォーマンス低下・競合時の例外発生が懸念されるため
-シーケンスオブジェクトをプログラム中から直接利用することでアトミックな採番を可能とする。
+### 3. シーケンスの扱い
 
-- CAFIS 通番シーケンス（SQL Server SEQUENCE オブジェクト、テーブルなし）
+CAFIS/CARDNET ともに電文に使用した最新通番を永続化する必要がある。
+SQLite3 には SEQUENCE オブジェクトが存在しないため、専用のシーケンステーブルで管理する。
+Gateway Service は回線ごとに単一インスタンスのため、concurrent write による競合は発生しない。
+
+- CAFIS 通番シーケンス（SQLite3 シーケンステーブル）
   - 対象データ： 仕向処理通番
-- CARDNET 通番シーケンス（SQL Server SEQUENCE オブジェクト、テーブルなし）
+- CARDNET 通番シーケンス（SQLite3 シーケンステーブル）
   - 対象データ： システムトレースオーディットナンバー（STAN / BIT11）
 
-SEQUENCEは接続先コード毎に定義され、存在しない場合はアプリケーションが動的にCREATEする。
+シーケンステーブルは接続コード毎に1レコードで管理し、存在しない場合はアプリケーションが動的にINSERTする。
 
 ### 4. テーブル詳細
 
 #### 4.1 CAFIS カット対象日付
 
-テーブル名：`Trn_CafisCutDate`
+テーブル名：`Trn_CafisCutDate`  
+想定操作：INSERT / UPDATE / DELETE
 
 CAFIS の日次バッチ処理において、カット（締め）処理の対象となる日付を管理するテーブル。
 
@@ -65,11 +110,10 @@ CAFIS の日次バッチ処理において、カット（締め）処理の対�
 | --- | --- | :---: | --- |
 | CutDate | DATE | ○ | カット対象日付（主キー） |
 | Status | CHAR(1) | ○ | 処理状態（`0`：未処理、`1`：処理中、`2`：完了） |
-| DeleteDate | DATE | ○ | 削除予定日（`CutDate` + 30日）。カット日付更新コマンド実行時にこの日付に達したレコードをジャーナルごと削除する |
+| DeleteDate | DATE | ○ | 削除予定日（`CutDate` + 7日）。カット日付更新コマンド実行時にこの日付に達したレコードをジャーナルごと削除する |
 | Created | DATETIME | | レコード作成日時（`DEFAULT GETDATE()`、INSERT 時に SQL Server が自動セット） |
 | Updated | DATETIME | | レコード更新日時 |
 | Modifier | VARCHAR(32) | | 最終更新者 |
-| RowVersion | TIMESTAMP | | 行バージョン（楽観的排他制御） |
 
 ---
 
@@ -132,7 +176,7 @@ CARDNET の日次バッチ処理において、カット（締め）処理の対
 | --- | --- | :---: | --- |
 | CutDate | DATE | ○ | カット対象日付（主キー） |
 | Status | CHAR(1) | ○ | 処理状態（`0`：未処理、`1`：処理中、`2`：完了） |
-| DeleteDate | DATE | ○ | 削除予定日（`CutDate` + 30日）。カット日付更新コマンド実行時にこの日付に達したレコードをジャーナルごと削除する |
+| DeleteDate | DATE | ○ | 削除予定日（`CutDate` + 7日）。カット日付更新コマンド実行時にこの日付に達したレコードをジャーナルごと削除する |
 | Created | DATETIME | | レコード作成日時（`DEFAULT GETDATE()`、INSERT 時に SQL Server が自動セット） |
 | Updated | DATETIME | | レコード更新日時 |
 | Modifier | VARCHAR(32) | | 最終更新者 |
@@ -216,91 +260,93 @@ CARDNET センタとの通信に使用する暗号化基本キー（KEK）を接
 
 #### 5.1 CAFIS 通番シーケンス
 
-テーブルなし。SQL Server の **SEQUENCE オブジェクト**で管理する。
+SQLite3 の **シーケンステーブル**で管理する。
 
-- 命名規則：`dbo.CafisSeq_{ConnectCd}`（例：`dbo.CafisSeq_2s308090001`）
-- 接続コードごとに1オブジェクト。初回使用時に動的 `CREATE SEQUENCE` する
-- `NEXT VALUE FOR` はアトミックのため、コンカレント呼び出しでも競合しない
-- カット時に `ALTER SEQUENCE ... RESTART WITH 1` でリセットする
+- テーブル名：`CafisSeq`
+- 接続コードごとに1レコード。初回使用時にアプリケーションが動的に `INSERT` する
+- Gateway Service は単一インスタンスのため concurrent write による競合は発生しない
+- カット時に `CurrentVal = 0` にリセットする
 
-#### 実装サンプル（C# / EF Core）
+```sql
+CREATE TABLE IF NOT EXISTS CafisSeq (
+    ConnectCd TEXT PRIMARY KEY,
+    CurrentVal INTEGER NOT NULL DEFAULT 0
+);
+```
+
+#### 実装サンプル（C# / Microsoft.Data.Sqlite）
 
 ```csharp
-// シーケンス名（ConnectCd は英数字のみ許可してインジェクション対策）
-private static string SeqName(string connectCd)
-{
-    if (!Regex.IsMatch(connectCd, @"^[A-Za-z0-9]+$"))
-        throw new ArgumentException("Invalid ConnectCd");
-    return $"dbo.CafisSeq_{connectCd}";
-}
-
 // 存在しなければ作成
-await context.Database.ExecuteSqlRawAsync($"""
-    IF NOT EXISTS (
-        SELECT 1 FROM sys.sequences
-        WHERE schema_id = SCHEMA_ID('dbo') AND name = 'CafisSeq_{connectCd}'
-    )
-    CREATE SEQUENCE {SeqName(connectCd)}
-        AS INT START WITH 1 INCREMENT BY 1
-        MINVALUE 1 MAXVALUE 999999 NO CYCLE CACHE 20
-    """);
+await connection.ExecuteAsync("""
+    INSERT OR IGNORE INTO CafisSeq (ConnectCd, CurrentVal)
+    VALUES (@cd, 0)
+    """, new { cd = connectCd });
 
-// 採番（競合しない）
-var no = await context.Database
-    .SqlQueryRaw<int>($"SELECT NEXT VALUE FOR {SeqName(connectCd)}")
-    .FirstAsync();
+// 採番
+await connection.ExecuteAsync("""
+    UPDATE CafisSeq SET CurrentVal = CurrentVal + 1
+    WHERE ConnectCd = @cd
+    """, new { cd = connectCd });
+
+var no = await connection.ExecuteScalarAsync<int>(
+    "SELECT CurrentVal FROM CafisSeq WHERE ConnectCd = @cd",
+    new { cd = connectCd });
+
 var sequenceNo = no.ToString("D6"); // → "000001"
 
 // カット時にリセット
-await context.Database.ExecuteSqlRawAsync(
-    $"ALTER SEQUENCE {SeqName(connectCd)} RESTART WITH 1");
+await connection.ExecuteAsync(
+    "UPDATE CafisSeq SET CurrentVal = 0 WHERE ConnectCd = @cd",
+    new { cd = connectCd });
 ```
 
 ---
 
 #### 5.2 CARDNET 通番シーケンス
 
-テーブルなし。SQL Server の **SEQUENCE オブジェクト**で管理する。
+SQLite3 の **シーケンステーブル**で管理する。
 
 - 対象：システムトレースオーディットナンバー（STAN / BIT11、6桁）
-- 命名規則：`dbo.CardnetSeq_{ConnectCd}`（例：`dbo.CardnetSeq_3M308090003`）
-- 接続コードごとに1オブジェクト。初回使用時に動的 `CREATE SEQUENCE` する
-- `NEXT VALUE FOR` はアトミックのため、コンカレント呼び出しでも競合しない
-- カット時に `ALTER SEQUENCE ... RESTART WITH 1` でリセットする
+- テーブル名：`CardnetSeq`
+- 接続コードごとに1レコード。初回使用時にアプリケーションが動的に `INSERT` する
+- Gateway Service は単一インスタンスのため concurrent write による競合は発生しない
+- カット時に `CurrentVal = 0` にリセットする
 
 > **BIT37 リトリーバルリファレンスナンバー（RRN）** は BIT11 STAN から派生させる（例：`YYJJJ` + STAN6桁など）。
 > RRN の具体的な構築ルールは CARDNET 仕様書・運用規定に従うこと。
 
-#### 実装サンプル（C# / EF Core）
+```sql
+CREATE TABLE IF NOT EXISTS CardnetSeq (
+    ConnectCd TEXT PRIMARY KEY,
+    CurrentVal INTEGER NOT NULL DEFAULT 0
+);
+```
+
+#### 実装サンプル（C# / Microsoft.Data.Sqlite）
 
 ```csharp
-// シーケンス名（ConnectCd は英数字のみ許可してインジェクション対策）
-private static string SeqName(string connectCd)
-{
-    if (!Regex.IsMatch(connectCd, @"^[A-Za-z0-9]+$"))
-        throw new ArgumentException("Invalid ConnectCd");
-    return $"dbo.CardnetSeq_{connectCd}";
-}
-
 // 存在しなければ作成
-await context.Database.ExecuteSqlRawAsync($"""
-    IF NOT EXISTS (
-        SELECT 1 FROM sys.sequences
-        WHERE schema_id = SCHEMA_ID('dbo') AND name = 'CardnetSeq_{connectCd}'
-    )
-    CREATE SEQUENCE {SeqName(connectCd)}
-        AS INT START WITH 1 INCREMENT BY 1
-        MINVALUE 1 MAXVALUE 999999 NO CYCLE CACHE 20
-    """);
+await connection.ExecuteAsync("""
+    INSERT OR IGNORE INTO CardnetSeq (ConnectCd, CurrentVal)
+    VALUES (@cd, 0)
+    """, new { cd = connectCd });
 
-// 採番（競合しない）
-var no = await context.Database
-    .SqlQueryRaw<int>($"SELECT NEXT VALUE FOR {SeqName(connectCd)}")
-    .FirstAsync();
+// 採番
+await connection.ExecuteAsync("""
+    UPDATE CardnetSeq SET CurrentVal = CurrentVal + 1
+    WHERE ConnectCd = @cd
+    """, new { cd = connectCd });
+
+var no = await connection.ExecuteScalarAsync<int>(
+    "SELECT CurrentVal FROM CardnetSeq WHERE ConnectCd = @cd",
+    new { cd = connectCd });
+
 var stanNum = no.ToString("D6"); // → "000001"
 
 // カット時にリセット
-await context.Database.ExecuteSqlRawAsync(
-    $"ALTER SEQUENCE {SeqName(connectCd)} RESTART WITH 1");
+await connection.ExecuteAsync(
+    "UPDATE CardnetSeq SET CurrentVal = 0 WHERE ConnectCd = @cd",
+    new { cd = connectCd });
 ```
 
