@@ -6,7 +6,8 @@
 | ---------- | ---------- | -------- | ------ |
 | v0.1       | 2026-02-03 | 初版作成 | k_yoshizawa |
 | v0.2       | 2026-02-19 | インフラレビュー結果反映、記載の整理 | k_yoshizawa |
-| v0.3       | 2026-02-26 | レビュー結果反映 （バッチ関連追加、証明書処理変更） | k_yoshizawa |
+| v0.3       | 2026-02-26 | コンポーネント名称の整理 (Dummy Server ⇒ CAFIS/CARDNET Simulator) | 内川 |
+| v0.4       | 2026-02-26 | レビュー結果反映 （バッチ関連追加、証明書処理変更） | k_yoshizawa |
 
 ---
 
@@ -26,7 +27,7 @@
 - 機能要件： Routing Engine
 - 機能要件： Gateway Service
 - 機能要件： Cli
-- 機能要件： Dummy Server
+- 機能要件： CAFIS/CARDNET Simulator
 - 機能要件： 更新対象のソフト (CAFIS系統)
 - 機能要件： 更新対象のソフト (CARDNET系統)
 
@@ -423,7 +424,7 @@ cli からは要求だけ行い、処理本体は Gateway Service 側で実行�
 - 主に負荷試験時に利用する。
 
 ---
-## 4. 機能要件： Dummy Server
+## 4. 機能要件： CAFIS/CARDNET Simulator
 
 #### 分類
 
