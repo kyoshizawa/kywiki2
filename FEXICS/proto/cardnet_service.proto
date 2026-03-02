@@ -37,10 +37,11 @@ service CardnetService {
   // OnlineAuthICC: IC オンラインオーソリ ※ CAFIS B22 相当
   rpc OnlineAuthICC(OnlineAuthICCRequest) returns (OnlineAuthICCResponse);
 
-  // OnlineAuthICC_Cancel: IC オーソリ取消 ※ CAFIS B23 相当
+  // OnlineAuthICCCancel: IC オーソリ取消 ※ CAFIS B23 相当
   rpc OnlineAuthICCCancel(OnlineAuthICCCancelRequest) returns (OnlineAuthICCCancelResponse);
 
   // SystemCancel: 障害取消 ※ CAFIS B25 相当
+  // CAFIS と異なり、取消対象の特定には SystemTraceAuditNo を使用する。
   // 注意: 対象取引が処理された接続コードの回線で処理する必要があるため、
   //       connection_codes には当該取引の接続コード 1 件のみを指定すること。
   rpc SystemCancel(SystemCancelRequest) returns (SystemCancelResponse);
@@ -56,6 +57,15 @@ service CardnetService {
 // SystemCancel では対象取引の接続コード 1 件のみ指定すること。
 message RoutingInfo {
   repeated string connection_codes = 1; // 接続コード一覧（例: "3M30809-0003"）
+}
+
+// オーソリ結果コード
+// FEXICS DLL の AUTH_RESULT enum に対応
+enum AuthResultCode {
+  AUTH_RESULT_UNSPECIFIED = 0;
+  AUTH_RESULT_ACCEPT      = 1; // 許可
+  AUTH_RESULT_REJECT      = 2; // 拒否
+  AUTH_RESULT_ERROR       = 3; // エラー（障害取消対象）
 }
 
 // ==========================================================================
@@ -92,7 +102,7 @@ message GetStatusRequest {
 
 message GetStatusResponse {
   string error_code = 1;
-  string status     = 2; // CARDNET 接続ステータス
+  string status     = 2; // CARDNET 接続ステータス（FEXICS_STATUS 相当）
 }
 
 // ==========================================================================
@@ -105,7 +115,7 @@ message CutOverRequest {
 
 message CutOverResponse {
   string error_code = 1;
-  string cut_date   = 2; // 更新後のカット日付（YYYYMMDD 形式）
+  string cut_date   = 2; // 現在カット日付（YYYYMMDD 形式）
 }
 
 // ==========================================================================
@@ -123,81 +133,88 @@ message EchoResponse {
 
 // ==========================================================================
 // OnlineAuthICC: IC オンラインオーソリ
+//
+// フィールド根拠: AP22 FexicsServiceRepository.OnlineAuthICC() 内で
+// 組み立てる OnlineAuthICC_Request に対応
 // ==========================================================================
 
 message OnlineAuthICCRequest {
-  RoutingInfo                routing          = 1;
-  google.protobuf.Timestamp  auth_datetime    = 2;  // 処理日付
-  int64                      terminal_id      = 3;  // 決済端末ID
-  int32                      terminal_tsuuban = 4;  // 決済端末処理通番
-  int32                      card_kbn         = 5;  // カード区分
-  string                     use_card_stripe  = 6;  // 使用するカードストライプ情報（PAN等）
-  int32                      pin              = 7;  // 暗証番号
-  string                     product_cd       = 8;  // 商品コード
-  int32                      fare             = 9;  // 金額
-  int32                      tax              = 10; // 税送料
-  string                     aid              = 11; // AID（Application Identifier）
-  string                     pos_entry_mode   = 12; // POSエントリモード
-  optional int32             pan_seq_no       = 13; // PANシーケンス番号
-  int32                      ic_terminal_flg  = 14; // IC対応端末フラグ
-  optional int32             encode_type      = 15; // エンコード種別
-  bytes                      icc_data         = 16; // ICC関連データ
+  RoutingInfo                routing              = 1;
+  google.protobuf.Timestamp  auth_datetime        = 2;  // 処理日付
+  string                     terminal_no          = 3;  // 端末番号
+  int32                      terminal_proc_no     = 4;  // 端末処理通番
+  string                     to_center_id         = 5;  // 仕向先センターID
+  string                     merchant_contract_cd = 6;  // 加盟店契約コード
+  string                     merchant_no          = 7;  // 加盟店番号（設定により送信）
+  int32                      fare                 = 8;  // 金額
+  string                     product_cd           = 9;  // 商品コード
+  string                     pos_data_cd          = 10; // POSデータコード
+  string                     merchant_type_cd     = 11; // 加盟店種別コード（MerchantTypeCd）
+  string                     jis1_track2          = 12; // JIS1トラック2（磁気ストライプ情報）
+  string                     terminal_no_part     = 13; // 端末番号パート
+  bytes                      icc_data             = 14; // ICC関連データ
+  string                     bit62_data           = 15; // BIT62データ（JCB/セゾン等のブランド拡張データ）
+  bool                       is_manual            = 16; // 手動処理フラグ
 }
 
+// OnlineAuthICC レスポンス
+// フィールド根拠: AP22 AuthResult クラスに対応
 message OnlineAuthICCResponse {
-  string center_no       = 1; // センタ識別番号
-  int32  process_md      = 2; // 処理月日（MMDD）
-  int32  process_tsuuban = 3; // 処理通番
-  string error_cd        = 4; // エラーコード（正常時は空文字）
-  string shonin_no       = 5; // 承認番号
-  bytes  icc_data        = 6; // ICC関連データ（CARDNET応答分）
-  string res_cd          = 7; // レスポンスコード
+  AuthResultCode  result                    = 1;  // オーソリ結果（ACCEPT / REJECT / ERROR）
+  string          summary_date              = 2;  // 精査日
+  optional uint32 system_trace_audit_no    = 3;  // システムトレースオーディットナンバー（障害取消で使用）
+  string          retrieval_reference_number = 4; // リトリーバルリファレンスナンバー
+  string          approval_no              = 5;  // 承認番号
+  string          action_cd               = 6;  // アクションコード（例: "000"）
+  string          response_cd             = 7;  // 国内レスポンスコード
+  string          icc_data                = 8;  // ICC関連データ（応答・HEX文字列）
+  string          decide_center_id        = 9;  // オーソリ判定センターID
+  string          bit62_data              = 10; // BIT62データ（応答・ブランド拡張）
 }
 
 // ==========================================================================
-// OnlineAuthICC_Cancel: IC オーソリ取消
+// OnlineAuthICCCancel: IC オーソリ取消
+//
+// フィールド根拠: AP22 FexicsServiceRepository.OnlineAuthICCCancel() 内で
+// 組み立てる OnlineAuthICC_Cancel_Request に対応
 // ==========================================================================
 
 message OnlineAuthICCCancelRequest {
-  RoutingInfo                routing          = 1;
-  google.protobuf.Timestamp  auth_datetime    = 2;
-  int64                      terminal_id      = 3;
-  int32                      terminal_tsuuban = 4;
-  int32                      card_kbn         = 5;
-  string                     use_card_stripe  = 6;
-  int32                      pin              = 7;
-  string                     product_cd       = 8;
-  int32                      fare             = 9;
-  int32                      tax              = 10;
-  string                     aid              = 11;
-  string                     pos_entry_mode   = 12;
-  optional int32             pan_seq_no       = 13;
-  int32                      ic_terminal_flg  = 14;
-  optional int32             encode_type      = 15;
-  bytes                      icc_data         = 16;
-  int32                      slip_no          = 17; // 取消伝票番号
-  int32                      cancel_cd        = 18; // 取消区分コード（1:取消, 2:返品）
+  RoutingInfo                routing                      = 1;
+  google.protobuf.Timestamp  auth_datetime                = 2;  // 取消取引の処理日付
+  string                     terminal_no                  = 3;  // 端末番号
+  int32                      terminal_proc_no             = 4;  // 取消取引の端末処理通番
+  string                     to_center_id                 = 5;  // 仕向先センターID
+  string                     merchant_contract_cd         = 6;  // 加盟店契約コード
+  uint32                     target_system_trace_audit_no = 7;  // 取消対象のシステムトレースオーディットナンバー
+  int32                      cancel_mode                  = 8;  // 取消モード（1: 取消固定）
+  int32                      cancel_terminal_proc_no      = 9;  // 取消元の端末処理通番（取消元取引の TerminalProcNo）
 }
 
+// OnlineAuthICCCancel レスポンス
+// フィールド構成は OnlineAuthICCResponse と共通
 message OnlineAuthICCCancelResponse {
-  string center_no       = 1;
-  int32  process_md      = 2;
-  int32  process_tsuuban = 3;
-  string error_cd        = 4;
-  string shonin_no       = 5;
-  bytes  icc_data        = 6;
-  string res_cd          = 7;
+  AuthResultCode  result                    = 1;
+  string          summary_date              = 2;
+  optional uint32 system_trace_audit_no    = 3;  // 障害取消で使用
+  string          retrieval_reference_number = 4;
+  string          approval_no              = 5;
+  string          action_cd               = 6;
+  string          response_cd             = 7;
+  string          icc_data                = 8;
+  string          decide_center_id        = 9;
 }
 
 // ==========================================================================
 // SystemCancel: 障害取消
+//
+// CAFIS の障害取消（B25）と異なり、CARDNET では SystemTraceAuditNo で
+// 対象取引を特定する。ShoriDate / TerminalId は不要。
 // ==========================================================================
 
 message SystemCancelRequest {
-  RoutingInfo                routing          = 1;
-  google.protobuf.Timestamp  shori_date       = 2; // 取消元処理日付
-  int32                      terminal_tsuuban = 3; // 取消対象端末処理通番
-  int64                      terminal_id      = 4; // 取消元決済端末ID
+  RoutingInfo    routing                = 1;
+  uint32         system_trace_audit_no = 2; // 取消対象のシステムトレースオーディットナンバー
 }
 
 message SystemCancelResponse {
