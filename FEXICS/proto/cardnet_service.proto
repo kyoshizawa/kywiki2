@@ -1,0 +1,205 @@
+syntax = "proto3";
+
+package fexics.cardnet.v1;
+
+option csharp_namespace = "Fexics.Cardnet.V1";
+
+import "google/protobuf/timestamp.proto";
+
+// CARDNET 通信サービス
+// AP22 (CardnetService) → Routing Engine → Gateway Service (CARDNET接続)
+// 待ち受けポート: 5000
+//
+// Note: CARDNET が対応する金種は IC のみ（iD・磁気は対象外）
+service CardnetService {
+
+  // ---- 制御電文 ----
+
+  // SignOn: 開局（接続確立）※ CAFIS C01 相当
+  rpc SignOn(SignOnRequest) returns (SignOnResponse);
+
+  // SignOff: 閉局（接続切断）※ CAFIS C02 相当
+  rpc SignOff(SignOffRequest) returns (SignOffResponse);
+
+  // GetStatus: ステータス取得（ヘルスチェックにも使用）※ CAFIS C03 相当
+  rpc GetStatus(GetStatusRequest) returns (GetStatusResponse);
+
+  // CutOver: 日次更新（カット日付更新）※ CAFIS C12 相当
+  rpc CutOver(CutOverRequest) returns (CutOverResponse);
+
+  // Echo: 死活確認（ハートビート）※ CARDNET 固有、CAFIS に相当なし
+  // 接続維持のため定期的に Gateway Service から CARDNET へ送信される。
+  // AP22 / CLI からも手動実行可能。
+  rpc Echo(EchoRequest) returns (EchoResponse);
+
+  // ---- 業務電文 ----
+
+  // OnlineAuthICC: IC オンラインオーソリ ※ CAFIS B22 相当
+  rpc OnlineAuthICC(OnlineAuthICCRequest) returns (OnlineAuthICCResponse);
+
+  // OnlineAuthICC_Cancel: IC オーソリ取消 ※ CAFIS B23 相当
+  rpc OnlineAuthICCCancel(OnlineAuthICCCancelRequest) returns (OnlineAuthICCCancelResponse);
+
+  // SystemCancel: 障害取消 ※ CAFIS B25 相当
+  // 注意: 対象取引が処理された接続コードの回線で処理する必要があるため、
+  //       connection_codes には当該取引の接続コード 1 件のみを指定すること。
+  rpc SystemCancel(SystemCancelRequest) returns (SystemCancelResponse);
+}
+
+// ==========================================================================
+// 共通
+// ==========================================================================
+
+// ルーティング情報（全リクエスト共通）
+// Routing Engine が接続先 Gateway Service を選択するために使用する。
+// 複数指定した場合、障害中の接続先を除外して接続を試みる。
+// SystemCancel では対象取引の接続コード 1 件のみ指定すること。
+message RoutingInfo {
+  repeated string connection_codes = 1; // 接続コード一覧（例: "3M30809-0003"）
+}
+
+// ==========================================================================
+// SignOn: 開局
+// ==========================================================================
+
+message SignOnRequest {
+  RoutingInfo routing = 1;
+}
+
+message SignOnResponse {
+  string error_code = 1; // エラーコード（正常時は空文字）
+}
+
+// ==========================================================================
+// SignOff: 閉局
+// ==========================================================================
+
+message SignOffRequest {
+  RoutingInfo routing = 1;
+}
+
+message SignOffResponse {
+  string error_code = 1;
+}
+
+// ==========================================================================
+// GetStatus: ステータス取得
+// ==========================================================================
+
+message GetStatusRequest {
+  RoutingInfo routing = 1;
+}
+
+message GetStatusResponse {
+  string error_code = 1;
+  string status     = 2; // CARDNET 接続ステータス
+}
+
+// ==========================================================================
+// CutOver: 日次更新
+// ==========================================================================
+
+message CutOverRequest {
+  RoutingInfo routing = 1;
+}
+
+message CutOverResponse {
+  string error_code = 1;
+  string cut_date   = 2; // 更新後のカット日付（YYYYMMDD 形式）
+}
+
+// ==========================================================================
+// Echo: 死活確認（ハートビート）
+// ==========================================================================
+
+message EchoRequest {
+  RoutingInfo routing = 1;
+}
+
+message EchoResponse {
+  string error_code = 1;
+  bool   alive      = 2; // 疎通確認結果（true: 正常）
+}
+
+// ==========================================================================
+// OnlineAuthICC: IC オンラインオーソリ
+// ==========================================================================
+
+message OnlineAuthICCRequest {
+  RoutingInfo                routing          = 1;
+  google.protobuf.Timestamp  auth_datetime    = 2;  // 処理日付
+  int64                      terminal_id      = 3;  // 決済端末ID
+  int32                      terminal_tsuuban = 4;  // 決済端末処理通番
+  int32                      card_kbn         = 5;  // カード区分
+  string                     use_card_stripe  = 6;  // 使用するカードストライプ情報（PAN等）
+  int32                      pin              = 7;  // 暗証番号
+  string                     product_cd       = 8;  // 商品コード
+  int32                      fare             = 9;  // 金額
+  int32                      tax              = 10; // 税送料
+  string                     aid              = 11; // AID（Application Identifier）
+  string                     pos_entry_mode   = 12; // POSエントリモード
+  optional int32             pan_seq_no       = 13; // PANシーケンス番号
+  int32                      ic_terminal_flg  = 14; // IC対応端末フラグ
+  optional int32             encode_type      = 15; // エンコード種別
+  bytes                      icc_data         = 16; // ICC関連データ
+}
+
+message OnlineAuthICCResponse {
+  string center_no       = 1; // センタ識別番号
+  int32  process_md      = 2; // 処理月日（MMDD）
+  int32  process_tsuuban = 3; // 処理通番
+  string error_cd        = 4; // エラーコード（正常時は空文字）
+  string shonin_no       = 5; // 承認番号
+  bytes  icc_data        = 6; // ICC関連データ（CARDNET応答分）
+  string res_cd          = 7; // レスポンスコード
+}
+
+// ==========================================================================
+// OnlineAuthICC_Cancel: IC オーソリ取消
+// ==========================================================================
+
+message OnlineAuthICCCancelRequest {
+  RoutingInfo                routing          = 1;
+  google.protobuf.Timestamp  auth_datetime    = 2;
+  int64                      terminal_id      = 3;
+  int32                      terminal_tsuuban = 4;
+  int32                      card_kbn         = 5;
+  string                     use_card_stripe  = 6;
+  int32                      pin              = 7;
+  string                     product_cd       = 8;
+  int32                      fare             = 9;
+  int32                      tax              = 10;
+  string                     aid              = 11;
+  string                     pos_entry_mode   = 12;
+  optional int32             pan_seq_no       = 13;
+  int32                      ic_terminal_flg  = 14;
+  optional int32             encode_type      = 15;
+  bytes                      icc_data         = 16;
+  int32                      slip_no          = 17; // 取消伝票番号
+  int32                      cancel_cd        = 18; // 取消区分コード（1:取消, 2:返品）
+}
+
+message OnlineAuthICCCancelResponse {
+  string center_no       = 1;
+  int32  process_md      = 2;
+  int32  process_tsuuban = 3;
+  string error_cd        = 4;
+  string shonin_no       = 5;
+  bytes  icc_data        = 6;
+  string res_cd          = 7;
+}
+
+// ==========================================================================
+// SystemCancel: 障害取消
+// ==========================================================================
+
+message SystemCancelRequest {
+  RoutingInfo                routing          = 1;
+  google.protobuf.Timestamp  shori_date       = 2; // 取消元処理日付
+  int32                      terminal_tsuuban = 3; // 取消対象端末処理通番
+  int64                      terminal_id      = 4; // 取消元決済端末ID
+}
+
+message SystemCancelResponse {
+  string error_code = 1; // エラーコード（正常時は空文字）
+}

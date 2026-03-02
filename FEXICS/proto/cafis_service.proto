@@ -1,0 +1,400 @@
+syntax = "proto3";
+
+package fexics.cafis.v1;
+
+option csharp_namespace = "Fexics.Cafis.V1";
+
+import "google/protobuf/timestamp.proto";
+
+// CAFIS 通信サービス
+// AP02 (CafisLogic) → Routing Engine → Gateway Service (CAFIS接続)
+// 待ち受けポート: 7000
+service CafisService {
+
+  // ---- 制御電文 ----
+
+  // C01: 開局（接続確立）
+  rpc Open(OpenRequest) returns (OpenResponse);
+
+  // C02: 閉局（接続切断）
+  rpc Close(CloseRequest) returns (CloseResponse);
+
+  // C03: ステータス取得（ヘルスチェックにも使用）
+  rpc GetStatus(GetStatusRequest) returns (GetStatusResponse);
+
+  // C11: カット日付取得
+  rpc GetCutDate(GetCutDateRequest) returns (GetCutDateResponse);
+
+  // C12: カット日付更新
+  rpc UpdateCutDate(UpdateCutDateRequest) returns (UpdateCutDateResponse);
+
+  // ---- 業務電文 ----
+
+  // B01: iD アクセスキー取得（iD 決済で端末が必要とする鍵情報の取得）
+  rpc GetAccessKey(GetAccessKeyRequest) returns (GetAccessKeyResponse);
+
+  // B11: iD オンラインオーソリ
+  rpc IDOnlineAuth(IDOnlineAuthRequest) returns (IDOnlineAuthResponse);
+
+  // B12: iD オーソリ取消
+  rpc IDOnlineAuthCancel(IDOnlineAuthCancelRequest) returns (IDOnlineAuthCancelResponse);
+
+  // B16: MS（磁気）オンラインオーソリ
+  rpc OnlineAuth(OnlineAuthRequest) returns (OnlineAuthResponse);
+
+  // B17: MS オーソリ取消
+  rpc OnlineAuthCancel(OnlineAuthCancelRequest) returns (OnlineAuthCancelResponse);
+
+  // B22: IC オンラインオーソリ（SecureIC / Global Action からも使用）
+  rpc OnlineAuthIC(OnlineAuthICRequest) returns (OnlineAuthICResponse);
+
+  // B23: IC オーソリ取消（SecureIC / Global Action からも使用）
+  rpc OnlineAuthICCancel(OnlineAuthICCancelRequest) returns (OnlineAuthICCancelResponse);
+
+  // B24: アドバイス（IC 取引確定通知）
+  rpc Advice(AdviceRequest) returns (AdviceResponse);
+
+  // B25: 障害取消
+  // 注意: 対象取引が処理された接続コードの回線で処理する必要があるため、
+  //       connection_codes には当該取引の接続コード 1 件のみを指定すること。
+  rpc SystemCancel(SystemCancelRequest) returns (SystemCancelResponse);
+}
+
+// ==========================================================================
+// 共通
+// ==========================================================================
+
+// ルーティング情報（全リクエスト共通）
+// Routing Engine が接続先 Gateway Service を選択するために使用する。
+// 複数指定した場合、障害中の接続先を除外して接続を試みる。
+// B25（障害取消）では対象取引の接続コード 1 件のみ指定すること。
+message RoutingInfo {
+  repeated string connection_codes = 1; // 接続コード一覧（例: "2s30809-0003"）
+}
+
+// ==========================================================================
+// C01: 開局
+// ==========================================================================
+
+message OpenRequest {
+  RoutingInfo routing = 1;
+}
+
+message OpenResponse {
+  string error_code = 1; // エラーコード（正常時は空文字）
+}
+
+// ==========================================================================
+// C02: 閉局
+// ==========================================================================
+
+message CloseRequest {
+  RoutingInfo routing = 1;
+}
+
+message CloseResponse {
+  string error_code = 1;
+}
+
+// ==========================================================================
+// C03: ステータス取得
+// ==========================================================================
+
+message GetStatusRequest {
+  RoutingInfo routing = 1;
+}
+
+message GetStatusResponse {
+  string error_code = 1;
+  string status = 2; // CAFIS 接続ステータス
+}
+
+// ==========================================================================
+// C11: カット日付取得
+// ==========================================================================
+
+message GetCutDateRequest {
+  RoutingInfo routing = 1;
+}
+
+message GetCutDateResponse {
+  string error_code = 1;
+  string cut_date = 2; // カット日付（YYYYMMDD 形式）
+}
+
+// ==========================================================================
+// C12: カット日付更新
+// ==========================================================================
+
+message UpdateCutDateRequest {
+  RoutingInfo routing = 1;
+}
+
+message UpdateCutDateResponse {
+  string error_code = 1;
+  string cut_date = 2; // 更新後のカット日付（YYYYMMDD 形式）
+}
+
+// ==========================================================================
+// B01: iD アクセスキー取得
+// ==========================================================================
+
+// iD 鍵データ（カード会社別に新旧それぞれ提供される）
+message IDKeyData {
+  int32 version     = 1; // バージョン番号
+  int32 check_digit = 2; // チェックデジット
+  bytes access_key  = 3; // アクセスキー本体（暗号済み）
+}
+
+message GetAccessKeyRequest {
+  RoutingInfo    routing          = 1;
+  optional int32 terminal_tsuuban = 2; // 決済端末処理通番
+  string         scheme_id        = 3; // スキームID
+}
+
+message GetAccessKeyResponse {
+  string    cafis_error_cd    = 1; // CAFISエラーコード（正常時は空文字）
+  IDKeyData card1_new_key_data = 2; // カード会社1 新鍵データ
+  IDKeyData card2_new_key_data = 3; // カード会社2 新鍵データ
+  IDKeyData card1_old_key_data = 4; // カード会社1 旧鍵データ
+  IDKeyData card2_old_key_data = 5; // カード会社2 旧鍵データ
+}
+
+// ==========================================================================
+// B11: iD オンラインオーソリ
+// ==========================================================================
+
+message IDOnlineAuthRequest {
+  RoutingInfo                routing          = 1;
+  google.protobuf.Timestamp  auth_datetime    = 2;  // 処理日付
+  int64                      terminal_id      = 3;  // 決済端末ID
+  int32                      terminal_tsuuban = 4;  // 決済端末処理通番
+  string                     corp_cd          = 5;  // 会社コード
+  string                     member_no        = 6;  // 会員番号
+  string                     calidity_period  = 7;  // 有効期限（YYMM）
+  string                     scheme_id        = 8;  // スキームID
+  string                     jigyousha_cd     = 9;  // 事業者コード
+  int32                      pin              = 10; // 暗証番号
+  string                     product_id       = 11; // 商品コード
+  int32                      fare             = 12; // 金額
+  int32                      tax              = 13; // 税送料
+}
+
+message IDOnlineAuthResponse {
+  string cafis_center_no = 1; // センタ識別番号
+  int32  cafis_md        = 2; // CAFIS処理月日（MMDD）
+  int32  cafis_tsuuban   = 3; // CAFIS処理通番
+  string cafis_error_cd  = 4; // CAFISエラーコード
+  string shonin_no       = 5; // 承認番号
+}
+
+// ==========================================================================
+// B12: iD オーソリ取消
+// ==========================================================================
+
+message IDOnlineAuthCancelRequest {
+  RoutingInfo                routing          = 1;
+  google.protobuf.Timestamp  auth_datetime    = 2;
+  int64                      terminal_id      = 3;
+  int32                      terminal_tsuuban = 4;
+  string                     corp_cd          = 5;
+  string                     member_no        = 6;
+  string                     calidity_period  = 7;
+  string                     scheme_id        = 8;
+  string                     jigyousha_cd     = 9;
+  int32                      pin              = 10;
+  string                     product_id       = 11;
+  int32                      fare             = 12;
+  int32                      tax              = 13;
+  optional int32             slip_no          = 14; // 取消伝票番号
+  optional int32             cancel_cd        = 15; // 取消区分コード（1:取消, 2:返品）
+}
+
+message IDOnlineAuthCancelResponse {
+  string cafis_center_no = 1;
+  int32  cafis_md        = 2;
+  int32  cafis_tsuuban   = 3;
+  string cafis_error_cd  = 4;
+  string shonin_no       = 5;
+}
+
+// ==========================================================================
+// B16: MS（磁気）オンラインオーソリ
+// ==========================================================================
+
+message OnlineAuthRequest {
+  RoutingInfo                routing          = 1;
+  google.protobuf.Timestamp  auth_datetime    = 2;  // 処理日付
+  int64                      terminal_id      = 3;  // 決済端末ID
+  int32                      terminal_tsuuban = 4;  // 決済端末処理通番
+  string                     card_kbn         = 5;  // カード区分
+  string                     card_stripe      = 6;  // カードストライプ情報
+  int32                      pin              = 7;  // 暗証番号
+  string                     product_id       = 8;  // 商品コード
+  int32                      fare             = 9;  // 金額
+  int32                      tax              = 10; // 税送料
+  string                     shimuke_cd       = 11; // 仕向コード
+  string                     shimuke_sub_cd   = 12; // 仕向サブコード
+}
+
+message OnlineAuthResponse {
+  string cafis_center_no = 1;
+  int32  cafis_md        = 2;
+  int32  cafis_tsuuban   = 3;
+  string cafis_error_cd  = 4;
+  string shonin_no       = 5;
+}
+
+// ==========================================================================
+// B17: MS オーソリ取消
+// ==========================================================================
+
+message OnlineAuthCancelRequest {
+  RoutingInfo                routing          = 1;
+  google.protobuf.Timestamp  auth_datetime    = 2;
+  int64                      terminal_id      = 3;
+  int32                      terminal_tsuuban = 4;
+  string                     card_kbn         = 5;
+  string                     card_stripe      = 6;
+  int32                      pin              = 7;
+  string                     product_id       = 8;
+  int32                      fare             = 9;
+  int32                      tax              = 10;
+  string                     shimuke_cd       = 11;
+  string                     shimuke_sub_cd   = 12;
+  optional int32             slip_no          = 13; // 取消伝票番号
+  optional int32             cancel_cd        = 14; // 取消区分コード（1:取消, 2:返品）
+}
+
+message OnlineAuthCancelResponse {
+  string cafis_center_no = 1;
+  int32  cafis_md        = 2;
+  int32  cafis_tsuuban   = 3;
+  string cafis_error_cd  = 4;
+  string shonin_no       = 5;
+}
+
+// ==========================================================================
+// B22: IC オンラインオーソリ
+// ==========================================================================
+
+message OnlineAuthICRequest {
+  RoutingInfo                routing              = 1;
+  google.protobuf.Timestamp  auth_datetime        = 2;  // 処理日付
+  int32                      terminal_tsuuban     = 3;  // 決済端末処理通番
+  int64                      terminal_id          = 4;  // 決済端末ID
+  int32                      card_kbn             = 5;  // カード区分
+  string                     use_card_stripe      = 6;  // 使用するカードストライプ情報
+  int32                      pin                  = 7;  // 暗証番号
+  string                     product_cd           = 8;  // 商品コード
+  int32                      fare                 = 9;  // 金額
+  int32                      tax                  = 10; // 税送料
+  string                     shimuke_cd           = 11; // 仕向コード
+  string                     aid                  = 12; // AID
+  string                     pos_entry_mode       = 13; // POSエントリモード
+  string                     kameiten_company_cd  = 14; // 自社仕向けコード
+  string                     kameiten_class_cd    = 15; // 加盟店分類コード
+  optional int32             pan_seq_no           = 16; // PANシーケンス番号
+  int32                      ic_terminal_flg      = 17; // IC対応端末フラグ
+  optional int32             encode_type          = 18; // エンコード種別
+  bytes                      icc_data             = 19; // ICC関連データ
+}
+
+message OnlineAuthICResponse {
+  string cafis_center_no = 1; // センタ識別番号
+  int32  cafis_md        = 2; // CAFIS処理月日（MMDD）
+  int32  cafis_tsuuban   = 3; // CAFIS処理通番
+  string cafis_error_cd  = 4; // CAFISエラーコード
+  string shonin_no       = 5; // 承認番号
+  bytes  icc_data        = 6; // ICC関連データ（CAFIS応答分）
+  string res_cd          = 7; // レスポンスコード
+}
+
+// ==========================================================================
+// B23: IC オーソリ取消
+// ==========================================================================
+
+message OnlineAuthICCancelRequest {
+  RoutingInfo                routing              = 1;
+  google.protobuf.Timestamp  auth_datetime        = 2;
+  int32                      terminal_tsuuban     = 3;
+  int64                      terminal_id          = 4;
+  int32                      card_kbn             = 5;
+  string                     use_card_stripe      = 6;
+  int32                      pin                  = 7;
+  string                     product_cd           = 8;
+  int32                      fare                 = 9;
+  int32                      tax                  = 10;
+  string                     shimuke_cd           = 11;
+  string                     aid                  = 12;
+  string                     pos_entry_mode       = 13;
+  string                     kameiten_company_cd  = 14;
+  string                     kameiten_class_cd    = 15;
+  optional int32             pan_seq_no           = 16;
+  int32                      ic_terminal_flg      = 17;
+  optional int32             encode_type          = 18;
+  bytes                      icc_data             = 19;
+  int32                      slip_no              = 20; // 取消伝票番号
+  int32                      cancel_cd            = 21; // 取消区分コード（1:取消, 2:返品）
+}
+
+message OnlineAuthICCancelResponse {
+  string cafis_center_no = 1;
+  int32  cafis_md        = 2;
+  int32  cafis_tsuuban   = 3;
+  string cafis_error_cd  = 4;
+  string shonin_no       = 5;
+  bytes  icc_data        = 6;
+  string res_cd          = 7;
+}
+
+// ==========================================================================
+// B24: アドバイス（IC 取引確定通知）
+// ==========================================================================
+
+message AdviceRequest {
+  RoutingInfo                routing             = 1;
+  google.protobuf.Timestamp  payment_datetime    = 2;  // 処理日付
+  int32                      terminal_tsuuban    = 3;  // 決済端末処理通番
+  int64                      terminal_id         = 4;  // 決済端末ID
+  string                     shimuke_cd          = 5;  // 仕向コード
+  string                     aid                 = 6;  // AID
+  string                     kameiten_company_cd = 7;  // 自社仕向けコード
+  string                     ms_ic_kbn           = 8;  // MS・IC区分
+  int32                      on_off_category     = 9;  // オンオフ区分
+  int32                      transaction_result  = 10; // 処理結果
+  int32                      force_online        = 11; // 強制オンライン
+  int32                      force_approval      = 12; // 強制承認
+  int32                      process_level       = 13; // 処理レベル
+  string                     brand_sign          = 14; // ブランド識別子
+  string                     pos_entry_mode      = 15; // POSエントリモード
+  string                     chip_condition      = 16; // チップコンディションコード
+  // 以下、オーソリ時のデータ
+  string                     shonin_no           = 17; // 承認番号
+  int32                      card_kbn            = 18; // カード区分
+  string                     use_card_stripe     = 19; // 使用するカードストライプ情報
+  string                     product_cd          = 20; // 商品コード
+  int32                      fare                = 21; // 金額
+  int32                      tax                 = 22; // 税送料
+  optional int32             encode_type         = 23; // エンコード種別
+  bytes                      icc_data            = 24; // ICC関連データ
+}
+
+message AdviceResponse {
+  string error_code = 1; // エラーコード（正常時は空文字）
+}
+
+// ==========================================================================
+// B25: 障害取消
+// ==========================================================================
+
+message SystemCancelRequest {
+  RoutingInfo                routing          = 1;
+  google.protobuf.Timestamp  shori_date       = 2; // 取消元処理日付
+  int32                      terminal_tsuuban = 3; // 取消対象端末処理通番
+  int64                      terminal_id      = 4; // 取消元決済端末ID
+}
+
+message SystemCancelResponse {
+  string error_code = 1; // エラーコード（正常時は空文字）
+}
