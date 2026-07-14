@@ -12,7 +12,8 @@
       "Bash(powershell:)",
       "Bash(cmd)",
       "Bash(ls:*)",
-      "Bash(wsl.exe *)"
+      "Bash(wsl.exe *)",
+      "PowerShell(Add-Type -AssemblyName System.Drawing; foreach \\($f in '3-1-11t.png','3-1-8t.png','3-1-3t.png','3-1-4t.png'\\) { $p = \"C:\\\\MediaRoot\\\\src2\\\\kyoshizawa\\\\kywiki2\\\\FEXICS\\\\関連資料_md\\\\CAFIS_03_BasicConnect\\\\img\\\\$f\"; if \\(Test-Path $p\\) { $img = [System.Drawing.Image]::FromFile\\($p\\); \\('{0}: {1} x {2}' -f $f, $img.Width, $img.Height\\); $img.Dispose\\(\\) } else { \\('{0}: NOT FOUND' -f $f\\) } })"
     ]
   }
 }
